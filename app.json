@@ -3,6 +3,9 @@
     "name": "indiekid",
     "slug": "indiekid",
     "version": "1.0.0",
+    "platforms": [
+      "ios"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
