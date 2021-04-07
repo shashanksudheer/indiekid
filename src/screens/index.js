@@ -1,3 +1,8 @@
 export { default as RegistrationScreen } from './RegistrationScreen/RegistrationScreen'
 export { default as LoginScreen } from './LoginScreen/LoginScreen'
 export { default as HomeScreen } from './HomeScreen/HomeScreen'
+export { default as DiscoverScreen } from './DiscoverScreen/DiscoverScreen'
+export { default as LibraryScreen } from './LibraryScreen/LibraryScreen'
+export { default as StreamScreen } from './StreamScreen/StreamScreen'
+export { default as StreamConfigScreen } from './StreamConfigScreen/StreamConfigScreen'
+export { default as NewContentScreen } from './NewContentScreen/NewContentScreen'

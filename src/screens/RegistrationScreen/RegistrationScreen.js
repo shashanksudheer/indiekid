@@ -5,6 +5,10 @@ import styles from './styles';
 
 import { firebase } from '../../firebase/config';
 
+// needs to include question about whether users would like to associate
+// their account with an artist account or fan account. Special questions
+// need to be shown to those users who would like to sign up as artists.
+
 export default function RegistrationScreen({navigation})
 {
     const [fullName, setFullName] = useState('');

@@ -5,6 +5,8 @@ import styles from './styles';
 
 import { firebase } from '../../firebase/config';
 
+// verify what kind of account the user has: fan or artist?
+
 export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
