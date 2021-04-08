@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 
@@ -9,12 +9,47 @@ import { firebase } from '../../firebase/config';
 // their account with an artist account or fan account. Special questions
 // need to be shown to those users who would like to sign up as artists.
 
+const RadioButton = props => {
+    return(
+        <TouchableOpacity style={styles.circle} onPress={props.onPress}>
+        {props.checked ? (<View style={checkedCircle}/>) : (<View/>)}
+        </TouchableOpacity>
+        )
+};
+
 export default function RegistrationScreen({navigation})
 {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [userType, setUserType] = useState('fan');
+
+    const [fan, setFan] = useState(true);
+    const [artist, setArtist] = useState(false);
+
+// radio buttons
+    const artistHandler = () => {
+        if (fan) {
+            setFan(false);
+            setUserType('artist');
+            setArtist(true);
+        } else {
+            setArtist(true);
+            setUserType('artist');
+        }
+    }
+
+    const fanHandler = () => {
+        if (artist) {
+            setArtist(false);
+            setUserType('fan');
+            setFan(true);
+        } else {
+            setArtist(true);
+            setUserType('fan');
+        }
+    }
 
     const onFooterLinkPress = () => {
         navigation.navigate('Login');
@@ -37,7 +72,8 @@ export default function RegistrationScreen({navigation})
 		{
 		    id: uid,
 		    email,
-		    fullName
+		    fullName,
+            userType
 		};
 		const usersRef = firebase.firestore().collection('users');
 
@@ -103,6 +139,13 @@ export default function RegistrationScreen({navigation})
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text>I am</Text>
+                <Text>an artist:</Text>
+                <RadioButton checked={artist} onPress={artistHandler}/>
+                <Text>a fan:</Text>
+                <RadioButton checked={fan} onPress={fanHandler}/>
+                </View>
+                <
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => onRegisterPress()}>

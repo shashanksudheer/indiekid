@@ -54,5 +54,19 @@ export default StyleSheet.create({
         color: "#788eec",
         fontWeight: "bold",
         fontSize: 16
-    }
-})
+    },
+    circle:{
+        height: 20,
+        width: 20,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#2e2e2d',
+        alignItems: 'center' // centers checked circle
+    },
+    checkedCircle:{
+        height: 14,
+        width: 14,
+        borderRadius: 7,
+        backgroundColor: '#788eec',
+    },
+});

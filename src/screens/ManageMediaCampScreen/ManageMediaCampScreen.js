@@ -3,13 +3,13 @@ import { Text, View } from 'react-native';
 import styles from './styles';
 
 import { firebase } from '../../firebase/config';
-// search bar in implemented here
+// Accessible only to artist accounts
 
-export default function DiscoverScreen(props)
+export default function ManageMediaCampScreen(props)
 {
     return (
         <View>
-            <Text> Discover Screen </Text>
+            <Text> Manage Media Campaign Screen </Text>
         </View>
     )
 }

@@ -3,13 +3,13 @@ import { Text, View } from 'react-native';
 import styles from './styles';
 
 import { firebase } from '../../firebase/config';
-// search bar in implemented here
+// whatever seems important here??? not sure
 
-export default function DiscoverScreen(props)
+export default function SettingsScreen(props)
 {
     return (
         <View>
-            <Text> Discover Screen </Text>
+            <Text> Settings </Text>
         </View>
     )
 }
