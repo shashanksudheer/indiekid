@@ -13,3 +13,5 @@ export { default as SearchResultScreen } from './SearchResultScreen/SearchResult
 export { default as ArtistPageScreen } from './ArtistPageScreen/ArtistPageScreen'
 export { default as DiscographyScreen } from './DiscographyScreen/DiscographyScreen'
 export { default as SettingsScreen } from './SettingsScreen/SettingsScreen'
+export { default as NotificationScreen } from './NotificationScreen/NotificationScreen'
+

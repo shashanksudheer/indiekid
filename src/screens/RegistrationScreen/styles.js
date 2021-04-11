@@ -17,6 +17,7 @@ export default StyleSheet.create({
     },
     input: {
         height: 48,
+        color: 'grey',
         borderRadius: 5,
         overflow: 'hidden',
         backgroundColor: 'white',
@@ -25,6 +26,14 @@ export default StyleSheet.create({
         marginLeft: 30,
         marginRight: 30,
         paddingLeft: 16
+    },
+    text: {
+        color: 'grey',
+        fontWeight: "bold",
+        alignSelf: "flex-start",
+        marginTop: 30,
+        marginLeft: 30,
+        marginRight: 30,
     },
     button: {
         backgroundColor: '#788eec',
@@ -38,13 +47,14 @@ export default StyleSheet.create({
     },
     buttonTitle: {
         color: 'white',
-        fontSize: 16,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        alignSelf: "center"
     },
     footerView: {
         flex: 1,
         alignItems: "center",
-        marginTop: 20
+        marginTop: 20,
+        marginBottom: 20
     },
     footerText: {
         fontSize: 16,
@@ -55,18 +65,37 @@ export default StyleSheet.create({
         fontWeight: "bold",
         fontSize: 16
     },
+    radioContainer: {
+        flex: 1,
+        height: 28,
+        borderRadius: 5,
+        backgroundColor: 'white',
+        marginTop: 5,
+        marginBottom: 5,
+        marginLeft: 30,
+        marginRight: 190
+    },
+    radioTitle: {
+        color: 'grey',
+        alignItems: "flex-start",
+        paddingTop: 5,
+        paddingLeft: 16
+    },
     circle:{
+        marginLeft: 120,
         height: 20,
         width: 20,
         borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#2e2e2d',
-        alignItems: 'center' // centers checked circle
+        borderWidth: 0.25,
+        borderColor: 'grey',
+        alignItems: 'center',
+        paddingTop: 2.5
     },
     checkedCircle:{
         height: 14,
         width: 14,
         borderRadius: 7,
         backgroundColor: '#788eec',
+        alignItems: 'center'
     },
 });

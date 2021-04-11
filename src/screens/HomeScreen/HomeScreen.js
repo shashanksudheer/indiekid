@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Text, View, FlatList } from 'react-native';
-import { List, ListItem } from "react-native-elements";
+import { AuthContext } from '../../navigation/AuthProvider';
 import styles from './styles';
 
-import { firebase } from '../../firebase/config';
-
-
-
-export default function HomeScreen(props)
+export default function HomeScreen({ navigation })
 {
+	const { user } = useContext(AuthContext);
     return (
-        <View>
-            <Text> Home Screen </Text>
+        <View style={styles.container}>
+            <Text> Welcome Home, {user.displayName} </Text>
+            <Text> (log out is in "Settings" bottom tab) </Text>
         </View>
     )
 }
