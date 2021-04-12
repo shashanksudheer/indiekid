@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { AuthContext } from '../../navigation/AuthProvider';
+import { AuthContext } from '../navigation/AuthProvider';
 import styles from './styles';
 
-import { firebase } from '../../firebase/config';
+import { firebase } from '../firebase/config';
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState('');
@@ -22,7 +22,7 @@ export default function LoginScreen({ navigation }) {
                 keyboardShouldPersistTaps="always">
                 <Image
                     style={styles.logo}
-                    source={require('../../../assets/icon.png')}
+                    source={require('../../assets/icon.png')}
                 />
                 <TextInput
                     style={styles.input}

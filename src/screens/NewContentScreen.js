@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { firebase } from '../firebase/config';
 import styles from './styles';
 
-import { firebase } from '../../firebase/config';
 // this page should be available to both artists and fans.
 // new content that fans can create are playlists.
 // artists can create songs, videos, as well as playlists. Everything 

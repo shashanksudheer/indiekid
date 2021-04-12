@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import styles from './styles';
 
-import { firebase } from '../../firebase/config';
+import { firebase } from '../firebase/config';
 // displays the songs in an album, EP, single, but 
 // is also used to display a single song + info about it when searched for.
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { firebase } from '../firebase/config';
 import styles from './styles';
 
-import { firebase } from '../../firebase/config';
 // Accessible only to artist accounts
 
 export default function ManageMediaCampScreen(props)

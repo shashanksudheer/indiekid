@@ -1,14 +1,13 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { firebase } from '../firebase/config';
 import styles from './styles';
 
-import { firebase } from '../../firebase/config';
-
-export default function EditProfileScreen(props)
+export default function NotificationScreen(props)
 {
     return (
         <View>
-            <Text> Edit Profile Screen </Text>
+            <Text> Notifications </Text>
         </View>
     )
 }

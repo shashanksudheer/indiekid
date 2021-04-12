@@ -1,10 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { firebase } from '../firebase/config';
 import styles from './styles';
 
-import { firebase } from '../../firebase/config';
 // this page is only available to artists.
-
 export default function StreamConfigScreen(props)
 {
     return (

@@ -1,22 +1,25 @@
 import React, { useState, useContext } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { AuthContext } from '../../navigation/AuthProvider';
+import { firebase } from '../firebase/config';
+import { AuthContext } from '../navigation/AuthProvider';
+import RadioButton from '../components/RadioButton';
 import styles from './styles';
-
-import { firebase } from '../../firebase/config';
 
 // needs to include question about whether users would like to associate
 // their account with an artist account or fan account. Special questions
 // need to be shown to those users who would like to sign up as artists.
 
-const RadioButton = props => {
-    return(
-        <TouchableOpacity style={styles.circle} onPress={props.onPress}>
-        {props.checked ? (<View style={styles.checkedCircle}/>) : (<View/>)}
-        </TouchableOpacity>
-        )
-};
+const PROP = [
+    {
+        key: 'artist',
+        text: 'an artist',
+    },
+    {
+        key: 'fan',
+        text: 'a fan',
+    }
+];
 
 export default function RegistrationScreen({navigation})
 {
@@ -30,29 +33,6 @@ export default function RegistrationScreen({navigation})
     const [fan, setFan] = useState(true);
     const [artist, setArtist] = useState(false);
 
-// radio buttons
-    const artistHandler = () => {
-        if (fan) {
-            setFan(false);
-            setUserType('artist');
-            setArtist(true);
-        } else {
-            setArtist(true);
-            setUserType('artist');
-        }
-    }
-
-    const fanHandler = () => {
-        if (artist) {
-            setArtist(false);
-            setUserType('fan');
-            setFan(true);
-        } else {
-            setArtist(true);
-            setUserType('fan');
-        }
-    }
-
     const onFooterLinkPress = () => {
         navigation.navigate('Login');
     }
@@ -64,11 +44,11 @@ export default function RegistrationScreen({navigation})
                 keyboardShouldPersistTaps="always">
                 <Image
                     style={styles.logo}
-                    source={require('../../../assets/icon.png')}
+                    source={require('../../assets/icon.png')}
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder='User Name'
+                    placeholder='Username'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setUserName(text)}
                     value={userName}
@@ -77,7 +57,7 @@ export default function RegistrationScreen({navigation})
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder='E-mail'
+                    placeholder='Email'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setEmail(text)}
                     value={email}
@@ -105,14 +85,7 @@ export default function RegistrationScreen({navigation})
                     autoCapitalize="none"
                 />
                 <Text style={styles.text}>I am:</Text>
-                <View style={styles.radioContainer}>
-                    <Text style={styles.radioTitle}>an artist </Text>
-                    <RadioButton checked={artist} onPress={artistHandler}/>
-                </View>
-                <View style={styles.radioContainer}>
-                    <Text style={styles.radioTitle}> a fan </Text>
-                    <RadioButton checked={fan} onPress={fanHandler}/>
-                </View>
+                    <RadioButton PROP={PROP} />
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => register(email, password, userName)}>

@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 30
     },
     title: {
 
@@ -28,12 +29,11 @@ export default StyleSheet.create({
         paddingLeft: 16
     },
     text: {
-        color: 'grey',
-        fontWeight: "bold",
+        color: 'black',
         alignSelf: "flex-start",
         marginTop: 30,
-        marginLeft: 30,
-        marginRight: 30,
+        marginLeft: 35,
+        marginRight: 35,
     },
     button: {
         backgroundColor: '#788eec',
@@ -47,6 +47,8 @@ export default StyleSheet.create({
     },
     buttonTitle: {
         color: 'white',
+        marginLeft: 30,
+        marginRight: 30,
         fontWeight: "bold",
         alignSelf: "center"
     },
@@ -64,38 +66,5 @@ export default StyleSheet.create({
         color: "#788eec",
         fontWeight: "bold",
         fontSize: 16
-    },
-    radioContainer: {
-        flex: 1,
-        height: 28,
-        borderRadius: 5,
-        backgroundColor: 'white',
-        marginTop: 5,
-        marginBottom: 5,
-        marginLeft: 30,
-        marginRight: 190
-    },
-    radioTitle: {
-        color: 'grey',
-        alignItems: "flex-start",
-        paddingTop: 5,
-        paddingLeft: 16
-    },
-    circle:{
-        marginLeft: 120,
-        height: 20,
-        width: 20,
-        borderRadius: 10,
-        borderWidth: 0.25,
-        borderColor: 'grey',
-        alignItems: 'center',
-        paddingTop: 2.5
-    },
-    checkedCircle:{
-        height: 14,
-        width: 14,
-        borderRadius: 7,
-        backgroundColor: '#788eec',
-        alignItems: 'center'
     },
 });

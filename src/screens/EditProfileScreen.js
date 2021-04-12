@@ -2,13 +2,13 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import styles from './styles';
 
-import { firebase } from '../../firebase/config';
+import { firebase } from '../firebase/config';
 
-export default function SearchResultScreen(props)
+export default function EditProfileScreen(props)
 {
     return (
         <View>
-            <Text> Search Result Screen </Text>
+            <Text> Edit Profile Screen </Text>
         </View>
     )
 }
