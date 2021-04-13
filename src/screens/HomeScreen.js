@@ -4,6 +4,7 @@ import { firebase } from '../firebase/config';
 import { AuthContext } from '../navigation/AuthProvider';
 import styles from './styles';
 
+// user.displayName takes a while to update when you first register
 export default function HomeScreen({ navigation })
 {
 	const { user } = useContext(AuthContext);

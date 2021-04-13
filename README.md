@@ -9,3 +9,5 @@
 We hope to eventually expand usership to independent record labels, add in-platform distribution, and also allow artists to collaborate over the platform.
 
 AuthFlow inspired by [this tutorial by Aman Mittal.](https://github.com/amandeepmittal/react-native-examples/tree/master/rnEmailAuthFirebase)
+
+RadioButton component inspired by [this tutorial.](https://dev.to/saadbashar/create-your-own-radio-button-component-in-react-native-easily-59il)

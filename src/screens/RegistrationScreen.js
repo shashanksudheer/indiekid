@@ -6,18 +6,17 @@ import { AuthContext } from '../navigation/AuthProvider';
 import RadioButton from '../components/RadioButton';
 import styles from './styles';
 
-// needs to include question about whether users would like to associate
-// their account with an artist account or fan account. Special questions
-// need to be shown to those users who would like to sign up as artists.
+// Special questions need to be shown to those users
+// who would like to sign up as artists.
 
-const PROP = [
-    {
-        key: 'artist',
-        text: 'an artist',
-    },
+const RadioOptions = [
     {
         key: 'fan',
         text: 'a fan',
+    },
+    {
+        key: 'artist',
+        text: 'an artist',
     }
 ];
 
@@ -27,11 +26,17 @@ export default function RegistrationScreen({navigation})
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const { register } = useContext(AuthContext);
-    const [userType, setUserType] = useState('fan');
+    const [userType, setUserType] = useState(null);
 
-    const [fan, setFan] = useState(true);
-    const [artist, setArtist] = useState(false);
+    const { register } = useContext(AuthContext);
+
+    const onSelect = (item) => {
+        if (userType === item.key) {
+          setUserType(null);
+        } else {
+          setUserType(item.key);
+        }
+    };
 
     const onFooterLinkPress = () => {
         navigation.navigate('Login');
@@ -85,10 +90,14 @@ export default function RegistrationScreen({navigation})
                     autoCapitalize="none"
                 />
                 <Text style={styles.text}>I am:</Text>
-                    <RadioButton PROP={PROP} />
+                <RadioButton
+                    selectedOption={userType}
+                    onSelect={onSelect}
+                    options={RadioOptions}
+                />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => register(email, password, userName)}>
+                    onPress={() => register(email, password, confirmPassword, userName, userType)}>
                     <Text style={styles.buttonTitle}>Sign Up</Text>
                 </TouchableOpacity>
                 <View style={styles.footerView}>
