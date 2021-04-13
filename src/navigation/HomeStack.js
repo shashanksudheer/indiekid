@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen, LibraryScreen, DiscoverScreen, StreamScreen, SettingsScreen } from '../screens';
+import { HomeScreen, LibraryScreen, DiscoverScreen, StreamScreen, SettingsScreen, ArtistPageScreen } from '../screens';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,6 +48,12 @@ export default function HomeStack() {
           component={MainNavigationTabs}
           options={{ header: () => null }}
         />
+        <Stack.Screen
+          name="ArtistPage"
+          component={ArtistPageScreen}
+          options={{ header: () => null }}
+        />
+
     </Stack.Navigator>
   );
 }
