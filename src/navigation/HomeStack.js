@@ -11,11 +11,27 @@ function MainNavigationTabs() {
   // for "Campaign" only visible to Artist users
   return (
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Library" component={LibraryScreen} />
-        <Tab.Screen name="Discover" component={DiscoverScreen} />
-        <Tab.Screen name="Stream" component={StreamScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen} 
+        />
+        <Tab.Screen 
+          name="Library" 
+          component={LibraryScreen} 
+          options={{ tabBarLabel: 'My Library' }}
+        />
+        <Tab.Screen
+          name="Discover"
+          component={DiscoverScreen}
+        />
+        <Tab.Screen
+          name="Stream" 
+          component={StreamScreen} 
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsScreen}
+        />
       </Tab.Navigator>
   );
 }
@@ -51,7 +67,6 @@ export default function HomeStack() {
         <Stack.Screen
           name="ArtistPage"
           component={ArtistPageScreen}
-          options={{ header: () => null }}
         />
 
     </Stack.Navigator>
