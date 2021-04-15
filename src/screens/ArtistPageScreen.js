@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { firebase } from '../firebase/config';
 import Loading  from '../components/Loading';
@@ -12,26 +12,26 @@ var userPage = null;
 export default function ArtistPageScreen( {navigation, route} )
 {
 	const [loading, setLoading] = useState(true);
-	const { ID } = route.params;
+	const { artistID } = route.params;
     useEffect(() => {
-		usersRef.doc(ID).get()
+		usersRef.doc(artistID).get()
 		.then((doc) => { // YOU NEED TO WAIT FOR get() to return
 		    if (!doc.exists) {
                 console.log('User not found');
             } else {
-                console.log('User found');
+                //console.log('User found');
                 userPage = doc.data(); // there might be some kind of bug here
             }})
         .catch((e) => console.error(e))
 		.finally(() => setLoading(false));
     }, []);
-    
+
 	if (loading) {
 		return <Loading />
 	} else {
 		return (
             <View style={styles.container}>
-                <Text> {userPage.username_d}'s Page </Text>
+                <Text style={styles.title}> {userPage.username_d} </Text>
             </View>
     )
 	}

@@ -7,7 +7,13 @@ export default StyleSheet.create({
         marginTop: 30
     },
     title: {
-
+        color: 'black',
+        alignSelf: "flex-start",
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginTop: 20,
+        marginLeft: 35,
+        marginRight: 35,
     },
     logo: {
         flex: 1,

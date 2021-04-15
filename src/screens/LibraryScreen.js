@@ -35,7 +35,7 @@ export default function LibraryScreen( { navigation } )
     }, []);
 
     return (
-            <View style={{ flex: 1, padding: 24 }}>
+            <View style={styles.container}>
                 <Text style={styles.text}>My Library</Text>
                 {loading ? <Loading/> : (
                     <FlatList
@@ -43,7 +43,16 @@ export default function LibraryScreen( { navigation } )
                         keyExtractor={({ id }, index) => id}
                         renderItem={({ item }) => (
                             <Text style={styles.text}>
-                                {item.songTitle} by {item.artistName}
+                                {item.songTitle} by
+                                <Button
+                                    style={styles.text}
+                                    title={item.artistName}
+                                    onPress={() => {
+                                	    navigation.navigate('ArtistPage', {
+                                		    artistID: item.artistID,
+                                	    });
+                                    }}
+                            />
                             </Text>
                         )}
                     />
