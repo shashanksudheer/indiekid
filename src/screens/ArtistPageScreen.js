@@ -1,30 +1,38 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Text, View } from 'react-native';
+import { firebase } from '../firebase/config';
+import Loading  from '../components/Loading';
 import styles from './styles';
 
-import { firebase } from '../firebase/config';
 // similar to spotify, display top five most popular songs, followed
 // by artist media, then links to albums, EPs, singles, and artist curated playlists.
-const usersCollectionRef = firebase.firestore().collection('users');
+const usersRef = firebase.firestore().collection('users');
+var userPage = null;
 
 export default function ArtistPageScreen( {navigation, route} )
 {
+	const [loading, setLoading] = useState(true);
 	const { ID } = route.params;
-	console.log(ID);
-	try {
-		const idDoc = usersCollectionRef.doc(ID).get();
-		if (!idDoc.exists) {
-            console.log('No such document!');
-        } else {
-            console.log('Document data:', idDoc.data());
-        }
-	} catch(e) {
-		console.log(e);
-	}
-    return (
-        <View style={styles.container}>
-            <Text> Artist Page </Text>
-            <Text>artistId: {JSON.stringify(ID)}</Text>
-        </View>
+    useEffect(() => {
+		usersRef.doc(ID).get()
+		.then((doc) => { // YOU NEED TO WAIT FOR get() to return
+		    if (!doc.exists) {
+                console.log('User not found');
+            } else {
+                console.log('User found');
+                userPage = doc.data(); // there might be some kind of bug here
+            }})
+        .catch((e) => console.error(e))
+		.finally(() => setLoading(false));
+    }, []);
+    
+	if (loading) {
+		return <Loading />
+	} else {
+		return (
+            <View style={styles.container}>
+                <Text> {userPage.username_d}'s Page </Text>
+            </View>
     )
+	}
 }

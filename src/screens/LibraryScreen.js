@@ -1,6 +1,7 @@
-import  React, { useState, useContext } from 'react';
-import { Text, View, TextInput, Button } from 'react-native';
+import  React, { useState, useContext, useEffect } from 'react';
+import { Text, View, TextInput, Button, FlatList } from 'react-native';
 import 'react-native-gesture-handler';
+import Loading  from '../components/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
 import styles from './styles';
 
@@ -11,17 +12,42 @@ import { firebase } from '../firebase/config';
 
 export default function LibraryScreen( { navigation } )
 {
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+
+    const { user } = useContext(AuthContext);
+
+    useEffect(() => {
+    	const savedSongs = [];
+        firebase.firestore().collection('users').doc(user.uid).collection('savedSongs')
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((song) => {
+                // song.data() is never undefined for query doc snapshots
+                let currentID = song.id;
+                let appObj = { ...song.data(), ['id']: currentID };
+                savedSongs.push(appObj);
+            });
+            setData(savedSongs);
+        })
+        .catch((e) => console.log("Error getting documents: ", e))
+        .finally(() => setLoading(false));
+    }, []);
+
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>My Library</Text>
-	        <Button
-	            title="Go to Artist Page"
-	            onPress={() => {
-	                navigation.navigate('ArtistPage', {
-	                    ID: 'shashank',
-	                });
-	            }}
-	        />
-        </View>
+            <View style={{ flex: 1, padding: 24 }}>
+                <Text style={styles.text}>My Library</Text>
+                {loading ? <Loading/> : (
+                    <FlatList
+                        data={data}
+                        keyExtractor={({ id }, index) => id}
+                        renderItem={({ item }) => (
+                            <Text style={styles.text}>
+                                {item.songTitle} by {item.artistName}
+                            </Text>
+                        )}
+                    />
+                )}
+            </View>
     )
 }
