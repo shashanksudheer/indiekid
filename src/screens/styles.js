@@ -15,6 +15,24 @@ export default StyleSheet.create({
         marginLeft: 35,
         marginRight: 35,
     },
+    sectionContainer: {
+        alignItems: "flex-start",
+        marginTop: 5,
+    },
+    sectionTitle: {
+        color: 'black',
+        alignSelf: "flex-start",
+        fontWeight: 'bold',
+        fontSize: 15,
+        marginTop: 10,
+    },
+    sectionItem: {
+        color: 'black',
+        alignSelf: "flex-start",
+        marginTop: 5,
+        marginLeft: 35,
+        marginRight: 35,
+    },
     logo: {
         flex: 1,
         height: 120,
@@ -36,6 +54,13 @@ export default StyleSheet.create({
     },
     text: {
         color: 'black',
+        alignSelf: "flex-start",
+        marginTop: 30,
+        marginLeft: 35,
+        marginRight: 35,
+    },
+    textButton: {
+        color: '#788eec',
         alignSelf: "flex-start",
         marginTop: 30,
         marginLeft: 35,

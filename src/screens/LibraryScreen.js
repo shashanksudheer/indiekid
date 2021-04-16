@@ -10,6 +10,36 @@ import { firebase } from '../firebase/config';
 // shows a button at the top right to create new content, both 
 // kinds of users can see this
 
+function DisplayList({ data, navigation }) {
+	//console.log(data);
+    if (data.length !== 0) {
+        return (
+      	    <FlatList
+                data={data}
+                keyExtractor={({ id }, index) => id}
+                renderItem={({ item }) => (
+                    <Text style={styles.text}>
+                        {item.songTitle} by{' '}
+                        <Text
+                            style={styles.textButton}
+                            onPress={() => {
+                                navigation.navigate('ArtistPage', {
+                                	artistID: item.artistID,
+                                });
+                        }}>
+                        {item.artistName}
+                        </Text>
+                    </Text>
+                )}
+            />
+        );
+    } else {
+        return (
+      	    <Text style={styles.text}>You don't have any saved songs...yet!</Text>
+      	);
+    }
+}
+
 export default function LibraryScreen( { navigation } )
 {
     const [loading, setLoading] = useState(true);
@@ -38,24 +68,7 @@ export default function LibraryScreen( { navigation } )
             <View style={styles.container}>
                 <Text style={styles.text}>My Library</Text>
                 {loading ? <Loading/> : (
-                    <FlatList
-                        data={data}
-                        keyExtractor={({ id }, index) => id}
-                        renderItem={({ item }) => (
-                            <Text style={styles.text}>
-                                {item.songTitle} by
-                                <Button
-                                    style={styles.text}
-                                    title={item.artistName}
-                                    onPress={() => {
-                                	    navigation.navigate('ArtistPage', {
-                                		    artistID: item.artistID,
-                                	    });
-                                    }}
-                            />
-                            </Text>
-                        )}
-                    />
+                    <DisplayList data={data} navigation={navigation}/>
                 )}
             </View>
     )
