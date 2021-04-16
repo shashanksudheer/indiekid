@@ -1,9 +1,10 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Button, Image } from 'react-native';
 import { HomeScreen, LibraryScreen, DiscoverScreen, StreamScreen, SettingsScreen, ArtistPageScreen } from '../screens';
 
-const Stack = createStackNavigator();
+const RootStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MainNavigationTabs() {
@@ -36,39 +37,80 @@ function MainNavigationTabs() {
   );
 }
 
+function LogoTitle() {
+  return (
+    <Image
+      style={{ width: 50, height: 50 }}
+      source={require('../../assets/notification-bell.png')}
+    />
+  );
+}
+
 export default function HomeStack() {
   return (
-    <Stack.Navigator>
-        <Stack.Screen
+    <RootStack.Navigator
+      screenOptions={{
+          headerStyle: {
+            backgroundColor: '#788eec',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      >
+        <RootStack.Screen
           name="Home"
           component={MainNavigationTabs}
-          options={{ header: () => null }}
+          options={{
+            headerTitle: "Home",
+            headerRight: () => (
+              <Button
+                onPress={() => alert('will be a notification screen')}
+                title="Notifications"
+                color="white"
+              />
+            ),
+          }}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="Library"
           component={MainNavigationTabs}
-          options={{ header: () => null }}
+          options={{
+            headerTitle: "My Library",
+            headerRight: () => (
+              <Button
+                onPress={() => alert('will be a create content screen')}
+                title="+"
+                color="white"
+              />
+            ),
+          }}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="Discover"
           component={MainNavigationTabs}
           options={{ header: () => null }}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="Stream"
           component={MainNavigationTabs}
           options={{ header: () => null }}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="Settings"
           component={MainNavigationTabs}
           options={{ header: () => null }}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="ArtistPage"
           component={ArtistPageScreen}
+          options={({ route }) => ({
+            title: route.params.artistName,
+            headerBackTitle: "" 
+          })}
         />
 
-    </Stack.Navigator>
+    </RootStack.Navigator>
   );
 }

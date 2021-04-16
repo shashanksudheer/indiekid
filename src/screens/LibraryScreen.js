@@ -25,6 +25,7 @@ function DisplayList({ data, navigation }) {
                             onPress={() => {
                                 navigation.navigate('ArtistPage', {
                                 	artistID: item.artistID,
+                                    artistName: item.artistName,
                                 });
                         }}>
                         {item.artistName}

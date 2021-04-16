@@ -1,10 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Text, View, SectionList } from 'react-native';
 import { firebase } from '../firebase/config';
+import cloneDeep from 'lodash/cloneDeep';
 import Loading  from '../components/Loading';
 import styles from './styles';
 
-// similar to spotify
+// similar to spotify. there is currently a bug on this
+// page because of an unmounted component.
 
 const usersRef = firebase.firestore().collection('users');
 const songsRef = firebase.firestore().collection('songs');
@@ -31,7 +33,7 @@ function getPopular(data) {
         .finally(() => {
             setMostPopular(allSongs.splice(0, 5))
         });
-    })
+    });
     return mostPopular;
 }
 function getReleases(data) {
@@ -72,15 +74,19 @@ function DisplayList({ artistID, artistBio, navigation }) {
 
     const mostPopular = [];
     mostPopularData.forEach((song) => {
-        mostPopular.push([song.songTitle, song.plays]);
+        mostPopular.push(song.songTitle);
     })
     const mostRecentReleases = [];
-    mostRecentReleasesData.forEach((album) => {
-        mostRecentReleases.push([album.contentName, album.published]);
+    audioData.forEach((album) => {
+        if (album.contentType !== 'playlist') {
+            mostRecentReleases.push(album.contentName);
+        }
     })
     const playlists = [];
-    playlistsData.forEach((playlist) => {
-        playlists.push([playlist.contentName, playlist.published]);
+    audioData.forEach((playlist) => {
+        if (playlist.contentType === 'playlist' && playlist.access === 'public') {
+            playlists.push(playlist.contentName);
+        }
     })
 
 	return ( 
@@ -130,7 +136,7 @@ export default function ArtistPageScreen({ navigation, route })
             <View style={styles.container}>
             {loading ? <Loading/> : (
             	<>
-                    <Text style={styles.title}> {userData[0].username_d} </Text>
+                    <Text style={styles.title}> {route.params.artistName} </Text>
                     <DisplayList artistID={artistID} artistBio={userData[0].artistBio} navigation={navigation}/>
                 </>
             )}
