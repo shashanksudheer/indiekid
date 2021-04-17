@@ -6,7 +6,8 @@ import Loading  from '../components/Loading';
 import styles from './styles';
 
 // similar to spotify. there is currently a bug on this
-// page because of an unmounted component.
+// page because of an unmounted component (mack may have fixed this
+// memory leak bug on april 16,2021.
 
 const usersRef = firebase.firestore().collection('users');
 const songsRef = firebase.firestore().collection('songs');
@@ -33,7 +34,8 @@ function getPopular(data) {
         .finally(() => {
             setMostPopular(allSongs.splice(0, 5))
         });
-    });
+    }, [data]);
+
     return mostPopular;
 }
 function getReleases(data) {

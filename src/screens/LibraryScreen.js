@@ -1,6 +1,5 @@
 import  React, { useState, useContext, useEffect } from 'react';
 import { Text, View, TextInput, Button, FlatList } from 'react-native';
-import 'react-native-gesture-handler';
 import Loading  from '../components/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
 import styles from './styles';
