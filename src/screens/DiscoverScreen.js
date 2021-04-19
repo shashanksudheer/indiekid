@@ -1,27 +1,92 @@
 import  React, { useState, useContext } from 'react';
-import { Text, View, TextInput, Button } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import 'react-native-gesture-handler';
 import { AuthContext } from '../navigation/AuthProvider';
 import styles from './styles';
 
+import { Searchbar, Button, Card, Title, Paragraph } from 'react-native-paper';
+
 import { firebase } from '../firebase/config';
-// search bar is implemented here, discover lists underneath the search bar.
+
 
 export default function DiscoverScreen( {navigation} )
 {
 	const { user } = useContext(AuthContext);
+    const [discoverArtists, setDiscoverArtists] = useState([]);
+	const [searchQuery, setSearchQuery] = React.useState('');
+
+	// Set up query to return all artists in users
+    const discoverArtistsRef = firebase.firestore().collection('users/')
+							   .where("userType_d", "==", "artist");
+
+	//function that sets search query into state variable
+	const onChangeSearch = (query) => setSearchQuery(query);
+
+	// function that handles executing db query and stores returned artists
+	// in state variable
+	const onSearchPress = () => {
+
+		discoverArtistsRef.get()
+			.then((querySnapshot) => {
+				returnedArtists = [];
+
+				querySnapshot.forEach((doc) => {
+					returnedArtists.push(doc.data());
+
+					//DEBUG CODE
+					console.log(doc.id, "=>", doc.data());
+				});
+				setDiscoverArtists(returnedArtists);
+			})
+			.catch((error) => {
+				console.log("Error getting documents: ", error);
+			});
+	}
+
+	// function that returns JSX creating a list of artist info returned from search
+	const ArtistTiles = () => {
+		return (
+			<View>
+
+			</View>
+		)
+	}
+
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Discover</Text>
-	        <Button
-	            title="Go to Artist Page"
-	            onPress={() => {
-	                navigation.navigate('ArtistPage', {
-	                    artistId: 86,
-	                });
-	            }}
-	        />
+			<Searchbar
+				placeholder="search for artists"
+				onChangeText = {onChangeSearch}
+				value={searchQuery}
+				style={{ margin: 15 }}
+			/>
+			<Button 
+				mode="contained"
+				onPress={onSearchPress}
+				style={{ margin: 5 }}>
+			SEARCH
+			</Button>
+
+			<ScrollView style={{ width:"100%", padding: 2 }}>
+			{discoverArtists.map(artist => 
+				<Card key={artist.username_d} style={{
+					width: "100%",
+					margin: 5,
+				}}>
+					<Card.Content>
+						<Title>{artist.username_d}</Title>
+						<Paragraph>{artist.artistBio}</Paragraph>
+					</Card.Content>
+					<Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+					<Card.Actions>
+						<Button 
+						mode="default"
+						onPress={}>Check Page</Button>
+					</Card.Actions>
+				</Card>
+			)}
+			</ScrollView>
 	    </View>
     )
 }
