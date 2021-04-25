@@ -122,7 +122,8 @@ export default function ArtistPageScreen({ navigation, route })
 		.get()
         .then((doc) => {
 		    if (!doc.exists) {
-                console.log('User not found');
+                console.log('Artist Page: User not found');
+                // console.log(artistID);
             } else {
                 userDoc.push(doc.data());
             }

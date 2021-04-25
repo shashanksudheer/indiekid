@@ -31,10 +31,12 @@ export default function DiscoverScreen( {navigation} )
 				returnedArtists = [];
 
 				querySnapshot.forEach((doc) => {
-					returnedArtists.push(doc.data());
+					let currentID = doc.id;
+	                let appObj = { ...doc.data(), ['id']: currentID };
+	                returnedArtists.push(appObj);
 
-					//DEBUG CODE
-					console.log(doc.id, "=>", doc.data());
+					// DEBUG CODE
+					// console.log(doc.id, "=>", doc.data());
 				});
 				setDiscoverArtists(returnedArtists);
 			})
@@ -82,7 +84,13 @@ export default function DiscoverScreen( {navigation} )
 					<Card.Actions>
 						<Button 
 						mode="default"
-						onPress={}>Check Page</Button>
+						onPress={() => {
+								// console.log(artist.id);
+                                navigation.navigate('ArtistPage', {
+                                	artistID: artist.id,
+                                    artistName: artist.username_d,
+                                });
+                        }}>Check Page</Button>
 					</Card.Actions>
 				</Card>
 			)}
