@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button } from 'react-native';
-import { LibraryScreen, ArtistPageScreen, DiscographyScreen } from '../screens';
+import { LibraryScreen, ArtistPageScreen, DiscographyScreen, NewContentScreen } from '../screens';
 
 const Stack = createStackNavigator();
 
@@ -22,16 +22,16 @@ export default function LibraryStack() {
         <Stack.Screen
           name="Library"
           component={LibraryScreen}
-          options={{
-            headerTitle: "My Library",
+          options={({ navigation }) => ({
+            title: "My Library",
             headerRight: () => (
               <Button
-                onPress={() => alert('will be a create content screen')}
+                onPress={() => navigation.navigate('NewContent')}
                 title="[ + ]"
                 color="white"
               />
-            ),
-          }}
+              ),
+          })}
         />
         <Stack.Screen
           name="ArtistPage"
@@ -52,6 +52,13 @@ export default function LibraryStack() {
           component={DiscographyScreen}
           options={({ route }) => ({
             title: route.params.contentName,
+          })}
+        />
+        <Stack.Screen
+          name="NewContent"
+          component={NewContentScreen}
+          options={() => ({
+            title: "Create Content",
           })}
         />
     </Stack.Navigator>

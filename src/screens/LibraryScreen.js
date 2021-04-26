@@ -40,7 +40,7 @@ function DisplayList({ data, navigation }) {
     }
 }
 
-export default function LibraryScreen( { navigation } )
+export default function LibraryScreen({ navigation })
 {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);

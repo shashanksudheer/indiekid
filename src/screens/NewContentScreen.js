@@ -10,7 +10,7 @@ import styles from './styles';
 // have an extra option to choose whether to make a playlist available
 // on their artist page.
 
-export default function NewContentScreen(props)
+export default function NewContentScreen({ navigation })
 {
     return (
         <View>
