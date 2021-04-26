@@ -11,7 +11,6 @@ export default function SettingsScreen(props)
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}> Settings </Text>
             <TouchableOpacity style={styles.button} onPress={() => logout()}>
              <Text style={styles.buttonTitle}>Log Out</Text>
             </TouchableOpacity>

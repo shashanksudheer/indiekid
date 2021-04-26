@@ -99,4 +99,12 @@ export default StyleSheet.create({
         fontWeight: "bold",
         fontSize: 16
     },
+    follow: {
+        color: '#788eec',
+        alignSelf: "flex-end",
+
+        marginTop: 35,
+        marginLeft: 35,
+        marginRight: 35,
+    },
 });

@@ -37,14 +37,21 @@ export default function LibraryStack() {
           name="ArtistPage"
           component={ArtistPageScreen}
           options={({ route }) => ({
-            title: route.params.artistName,
+            title: null,
+            headerRight: () => (
+              <Button
+                onPress={() => alert('subscribe')}
+                title="temptext"
+                color="white"
+              />
+            ),
           })}
         />
         <Stack.Screen
           name="Discography"
           component={DiscographyScreen}
           options={({ route }) => ({
-            title: route.params.artistName,
+            title: route.params.contentName,
           })}
         />
     </Stack.Navigator>

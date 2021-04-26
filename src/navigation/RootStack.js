@@ -6,6 +6,7 @@ import HomeStack from './HomeStack';
 import LibraryStack from './LibraryStack';
 import DiscoverStack from './DiscoverStack';
 import StreamStack from './StreamStack';
+import SettingsStack from './SettingsStack';
 import { DiscoverScreen, StreamScreen, SettingsScreen } from '../screens';
 
 const Tab = createBottomTabNavigator();
@@ -43,7 +44,7 @@ export default function RootStack() {
         />
         <Tab.Screen
           name="Settings"
-          component={SettingsScreen}
+          component={SettingsStack}
         />
       </Tab.Navigator>
   );

@@ -66,7 +66,6 @@ export default function LibraryScreen( { navigation } )
 
     return (
             <View style={styles.container}>
-                <Text style={styles.text}>My Library</Text>
                 {loading ? <Loading/> : (
                     <DisplayList data={data} navigation={navigation}/>
                 )}

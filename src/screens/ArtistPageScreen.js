@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Text, View, SectionList } from 'react-native';
+import { Text, View, SectionList, Button } from 'react-native';
 import { firebase } from '../firebase/config';
-import cloneDeep from 'lodash/cloneDeep';
 import Loading  from '../components/Loading';
 import styles from './styles';
 
@@ -38,16 +37,6 @@ function getPopular(data) {
 
     return mostPopular;
 }
-function getReleases(data) {
-    const mostRecentReleases = [];
-
-    return mostRecentReleases;
-}
-function getPlaylists(data) {
-    const playlists = [];
-    
-    return playlists;
-}
 
 function DisplayList({ artistID, artistBio, navigation }) {
 	const [loading, setLoading] = useState(true);
@@ -71,8 +60,6 @@ function DisplayList({ artistID, artistBio, navigation }) {
     }, []);
 
     const mostPopularData = getPopular(artistID);
-    const mostRecentReleasesData = getReleases(audioData);
-    const playlistsData = getPlaylists(audioData);
 
     const mostPopular = [];
     mostPopularData.forEach((song) => {
@@ -139,7 +126,10 @@ export default function ArtistPageScreen({ navigation, route })
             <View style={styles.container}>
             {loading ? <Loading/> : (
             	<>
-                    <Text style={styles.title}> {route.params.artistName} </Text>
+                    <Text
+                        style={styles.title}>
+                        {route.params.artistName}
+                    </Text>
                     <DisplayList artistID={artistID} artistBio={userData[0].artistBio} navigation={navigation}/>
                 </>
             )}
