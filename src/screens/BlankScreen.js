@@ -1,6 +1,9 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { firebase } from '../firebase/config';
+import { AuthContext } from '../navigation/AuthProvider';
+import RadioButton from '../components/RadioButton';
 import styles from './styles';
 
 // this page should be available to both artists and fans.
@@ -9,12 +12,11 @@ import styles from './styles';
 // except the playlists should be hidden from fans. Artists should
 // have an extra option to choose whether to make a playlist available
 // on their artist page.
-
 export default function NewContentScreen({ navigation })
 {
     return (
-        <View>
-            <Text> Create New Content Screen </Text>
+        <View style={styles.container}>
+            <Text> Blank Page </Text>
         </View>
     )
 }

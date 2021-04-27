@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { firebase } from '../firebase/config';
 import { AuthContext } from '../navigation/AuthProvider';
@@ -26,16 +26,12 @@ export default function RegistrationScreen({navigation})
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [userType, setUserType] = useState(null);
+    const [userType, setUserType] = useState('fan');
 
     const { register } = useContext(AuthContext);
 
     const onSelect = (item) => {
-        if (userType === item.key) {
-          setUserType(null);
-        } else {
-          setUserType(item.key);
-        }
+        setUserType(item.key);
     };
 
     const onFooterLinkPress = () => {

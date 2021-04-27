@@ -1,11 +1,64 @@
-import React, { Component } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button } from 'react-native';
-import { LibraryScreen, ArtistPageScreen, DiscographyScreen, NewContentScreen } from '../screens';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { AuthContext } from '../navigation/AuthProvider';
+import { firebase } from '../firebase/config';
+
+import { 
+  LibraryScreen, ArtistPageScreen, DiscographyScreen, 
+  CreatePlaylistScreen, CreateAlbumScreen, CreateSingleScreen, BlankScreen 
+} from '../screens';
 
 const Stack = createStackNavigator();
+const LibraryTab = createMaterialTopTabNavigator();
+const ArtistNewContentTab = createMaterialTopTabNavigator();
+const FanNewContentTab = createMaterialTopTabNavigator();
+
+function MyLibraryTab() {
+  return (
+    <LibraryTab.Navigator>
+      <LibraryTab.Screen name="Songs" component={LibraryScreen} />
+      <LibraryTab.Screen name="Artists" component={BlankScreen} />
+      <LibraryTab.Screen name="Playlists" component={BlankScreen} />
+    </LibraryTab.Navigator>
+  );
+}
+
+function ArtistContentTabs() {
+  return (
+    <ArtistNewContentTab.Navigator>
+        <ArtistNewContentTab.Screen name="Ablum" component={CreateAlbumScreen} />
+        <ArtistNewContentTab.Screen name="Single" component={CreateSingleScreen} />
+        <ArtistNewContentTab.Screen name="Playlist" component={CreatePlaylistScreen} />
+    </ArtistNewContentTab.Navigator>
+  );
+}
+
+function FanContentTabs() {
+  return (
+    <FanNewContentTab.Navigator>
+        <FanNewContentTab.Screen name="Playlist" component={CreatePlaylistScreen} />
+    </FanNewContentTab.Navigator>
+  );
+}
 
 export default function LibraryStack() {
+  const { user, setUser } = useContext(AuthContext);
+  const [userType, setUserType] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    firebase.firestore().collection('users').doc(user.uid)
+    .get()
+    .then((doc) => {
+      setUserType(doc.data().userType_d);
+      // console.log(userType);
+    })
+    .catch((e) => console.log("Error getting user type: ", e))
+    .finally(() => setLoading(false));
+  }, []);
+
   return (
     <Stack.Navigator
       initialRouteName='Library'
@@ -21,7 +74,7 @@ export default function LibraryStack() {
       >
         <Stack.Screen
           name="Library"
-          component={LibraryScreen}
+          component={MyLibraryTab}
           options={({ navigation }) => ({
             title: "My Library",
             headerRight: () => (
@@ -56,7 +109,7 @@ export default function LibraryStack() {
         />
         <Stack.Screen
           name="NewContent"
-          component={NewContentScreen}
+          component={ userType === "artist" ? ArtistContentTabs : FanContentTabs}
           options={() => ({
             title: "Create Content",
           })}

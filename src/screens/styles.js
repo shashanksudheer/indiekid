@@ -42,7 +42,6 @@ export default StyleSheet.create({
     },
     input: {
         height: 48,
-        width: 90,
         color: 'grey',
         borderRadius: 5,
         overflow: 'hidden',
