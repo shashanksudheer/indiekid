@@ -20,19 +20,50 @@ const RadioOptions = [
 export default function NewContentScreen({navigation})
 {
     const [playlistName, setPlaylistName] = useState('');
-    const [songs, setSongs] = useState([]);
     const [access, setAccess] = useState('private');
 
-    const { register } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     const onSelect = (item) => {
         setAccess(item.key);
     };
 
-    const makePlaylist = (playlistName, access, songs) => {
-        alert("making playlist");
-        console.log(playlistName);
-        console.log(access);
+    const makePlaylist = async (playlistName, access) => {
+        const data = {
+            access: access,
+            contentName: playlistName,
+            contentType: 'playlist',
+            published: firebase.firestore.Timestamp.now(),
+            songs: {}
+        };
+        const privData = {
+            owner: user.uid,
+            editors: []
+        };
+        console.log(data);
+        try {
+            await firebase.firestore().collection('users')
+            .doc(user.uid).collection('audioContent')
+            .add(data)
+            .then( async (result) => {
+            // creates the playlist in the user's audioConetent collection in firestore
+                console.log("Successfully added new playlist with ID:", result.id);
+                try {
+                    await firebase.firestore().collection('users').doc(user.uid)
+                    .collection('audioContent').doc(result.id)
+                    .collection('private').doc('private').set(privData);
+                } catch (e) {
+                    console.log(e);
+                }
+                navigation.navigate('playlistScreen', {playlistID: result.id});
+            }).catch((e) => {
+                alert(e);
+                console.log(e);
+            });
+        } catch (e) {
+          alert(e);
+          console.log(e);
+        }
     };
 
     return (
@@ -42,14 +73,13 @@ export default function NewContentScreen({navigation})
                 keyboardShouldPersistTaps="always">
                 <TextInput
                     style={styles.input}
-                    placeholder='Playlist Name'
+                    placeholder='New Playlist'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setPlaylistName(text)}
                     value={playlistName}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <Text style={styles.text}>adding songs here</Text>
                 <Text style={styles.text}>This is a</Text>
                 <RadioButton
                     selectedOption={access}
@@ -58,7 +88,7 @@ export default function NewContentScreen({navigation})
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => makePlaylist(playlistName, access, songs)}>
+                    onPress={() => makePlaylist(playlistName, access)}>
                     <Text style={styles.buttonTitle}>Create Playlist</Text>
                 </TouchableOpacity>
             </KeyboardAwareScrollView>

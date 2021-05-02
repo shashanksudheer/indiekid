@@ -7,7 +7,8 @@ import { firebase } from '../firebase/config';
 
 import { 
   LibraryScreen, ArtistPageScreen, DiscographyScreen, 
-  CreatePlaylistScreen, CreateAlbumScreen, CreateSingleScreen, BlankScreen 
+  CreatePlaylistScreen, CreateAlbumScreen, CreateSingleScreen,
+  BlankScreen, PlaylistScreen, LibraryPlaylistScreen
 } from '../screens';
 
 const Stack = createStackNavigator();
@@ -20,7 +21,7 @@ function MyLibraryTab() {
     <LibraryTab.Navigator>
       <LibraryTab.Screen name="Songs" component={LibraryScreen} />
       <LibraryTab.Screen name="Artists" component={BlankScreen} />
-      <LibraryTab.Screen name="Playlists" component={BlankScreen} />
+      <LibraryTab.Screen name="Playlists" component={LibraryPlaylistScreen} />
     </LibraryTab.Navigator>
   );
 }
@@ -104,7 +105,7 @@ export default function LibraryStack() {
           name="Discography"
           component={DiscographyScreen}
           options={({ route }) => ({
-            title: route.params.contentName,
+            title: null,
           })}
         />
         <Stack.Screen
@@ -112,6 +113,20 @@ export default function LibraryStack() {
           component={ userType === "artist" ? ArtistContentTabs : FanContentTabs}
           options={() => ({
             title: "Create Content",
+          })}
+        />
+        <Stack.Screen
+          name="playlistScreen"
+          component={PlaylistScreen}
+          options={({ navigation, route }) => ({
+            title: null,
+            headerLeft: () => (
+              <Button
+                onPress={() => navigation.navigate("Library")}
+                title="< Back"
+                color="white"
+              />
+            ),
           })}
         />
     </Stack.Navigator>
