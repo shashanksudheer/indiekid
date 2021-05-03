@@ -1,13 +1,9 @@
 import  React, { useState, useContext, useEffect } from 'react';
 import { Text, View, TextInput, Button, FlatList } from 'react-native';
-import Loading  from '../components/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
-import styles from './styles';
-
 import { firebase } from '../firebase/config';
-
-// shows a button at the top right to create new content, both 
-// kinds of users can see this
+import Loading  from '../components/Loading';
+import styles from './styles';
 
 function DisplayList({ data, navigation }) {
 	//console.log(data);

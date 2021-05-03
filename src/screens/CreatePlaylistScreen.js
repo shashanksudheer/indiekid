@@ -34,7 +34,7 @@ export default function NewContentScreen({navigation})
             contentName: playlistName,
             contentType: 'playlist',
             published: firebase.firestore.Timestamp.now(),
-            songs: {}
+            songs: []
         };
         const privData = {
             owner: user.uid,
