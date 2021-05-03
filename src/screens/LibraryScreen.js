@@ -13,7 +13,9 @@ function DisplayList({ data, navigation }) {
                 data={data}
                 keyExtractor={({ id }, index) => id}
                 renderItem={({ item }) => (
-                    <Text style={styles.text}>
+                    <Text
+                        style={styles.text}
+                        key={item.id}>
                         {item.songTitle} by{' '}
                         <Text
                             style={styles.textButton}
@@ -40,24 +42,27 @@ export default function LibraryScreen({ navigation })
 {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
-
     const { user } = useContext(AuthContext);
+    const savedSongsRef = firebase.firestore().collection('users')
+        .doc(user.uid).collection('savedSongs');
 
     useEffect(() => {
-    	const savedSongs = [];
-        firebase.firestore().collection('users')
-        .doc(user.uid).collection('savedSongs')
-        .get().then((querySnapshot) => {
-            querySnapshot.forEach((song) => {
-                // song.data() is never undefined for query doc snapshots
-                let currentID = song.id;
-                let appObj = { ...song.data(), ['id']: currentID };
-                savedSongs.push(appObj);
+        return savedSongsRef.onSnapshot(querySnapshot => {
+            const savedSongs = [];
+            querySnapshot.forEach(song => {
+                const { songTitle, artistID, artistName } = song.data();
+                savedSongs.push({
+                    id: song.id,
+                    songTitle,
+                    artistName,
+                    artistID,
+                });
             });
             setData(savedSongs);
-        })
-        .catch((e) => console.log("Error getting documents: ", e))
-        .finally(() => setLoading(false));
+            if(loading) {
+                setLoading(false);
+            }
+        });
     }, []);
 
     return (

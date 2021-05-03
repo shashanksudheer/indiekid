@@ -15,6 +15,7 @@ function DisplayList({ data, navigation }) {
                 renderItem={({ item }) => (
                     <Text
                         style={styles.textButton}
+                        key={item.id}
                         onPress={() => {
                             navigation.navigate('playlistScreen', {playlistID: item.id});
                     }}>
@@ -34,26 +35,29 @@ export default function LibraryScreen({ navigation })
 {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
-
     const { user } = useContext(AuthContext);
+    const playlistsRef = firebase.firestore().collection('users')
+        .doc(user.uid).collection('audioContent')
+        .where("contentType", "==", "playlist");
 
     useEffect(() => {
-    	const playlists = [];
-        firebase.firestore().collection('users')
-        .doc(user.uid).collection('audioContent')
-        .where("contentType", "==", "playlist")
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((playlist) => {
-                // playlist.data() is never undefined for query doc snapshots
-                let currentID = playlist.id;
-                let appObj = { ...playlist.data(), ['id']: currentID };
-                playlists.push(appObj);
+        return playlistsRef.onSnapshot(querySnapshot => {
+            const playlists = [];
+            querySnapshot.forEach(playlist => {
+                const { contentName, songs, access, published } = playlist.data();
+                playlists.push({
+                    id: playlist.id,
+                    contentName,
+                    access,
+                    published,
+                    songs,
+                });
             });
             setData(playlists);
-        })
-        .catch((e) => console.log("Error getting documents: ", e))
-        .finally(() => setLoading(false));
+            if(loading) {
+                setLoading(false);
+            }
+        });
     }, []);
 
     return (

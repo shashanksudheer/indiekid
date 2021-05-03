@@ -7,16 +7,16 @@ import { firebase } from '../firebase/config';
 import styles from './styles';
 // displays a playlist. if owner of playlist accesses playlist page, then
 // add songs button shows.
-// MAJOR DATA FETCHING BUG HERE
 function DisplayList({ data, navigation }) {
-    console.log(data);
     if (data.length !== 0) {
         return (
             <FlatList
                 data={data}
                 keyExtractor={({ id }, index) => id}
                 renderItem={({ item }) => (
-                    <Text style={styles.text}>
+                    <Text 
+                        style={styles.text}
+                        key={item.id}>
                         {item.songTitle} by{' '}
                         <Text
                             style={styles.textButton}
@@ -43,68 +43,102 @@ export default function PlaylistScreen({ navigation, route })
 {
     const { user } = useContext(AuthContext);
     const { playlistID } = route.params;
+
+    const [loadingSongIDs, setLoadingSongIDs] = useState(true);
     const [loading, setLoading] = useState(true);
     const [songIDs, setSongIDs] = useState([]);
     const [data, setData] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
+
+    const ownershipRef = firebase.firestore().collection('users')
+        .doc(user.uid).collection('audioContent')
+        .doc(playlistID).collection('private').doc('private');
+    const playlistRef = firebase.firestore().collection('users')
+        .doc(user.uid).collection('audioContent').doc(playlistID);
+    const songsQueryRef = firebase.firestore().collection('songs');
+
+// clear states on load
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            console.log("in listener")
+            setIsOwner(false);
+            setSongIDs([]);
+            setData([]);
+            setLoadingSongIDs(true);
+            setLoading(true);
+        });
+        return unsubscribe;
+    }, [navigation]);
 // check ownership
     useEffect(() => {
-        firebase.firestore().collection('users')
-        .doc(user.uid).collection('audioContent')
-        .doc(playlistID).collection('private')
-        .doc('private').get()
-        .then((result) => {
+        return ownershipRef.onSnapshot(result => {
             if (result.data().owner === user.uid) {
                 console.log("ownership matched")
                 setIsOwner(true);
             }
-        })
-        .catch((e) => console.log(e))
+        });
     }, []);
 // fetch songs from playlist
     useEffect(() => {
-        const savedSongs = [];
-        firebase.firestore().collection('users')
-        .doc(user.uid).collection('audioContent')
-        .doc(playlistID)
-        .get().then((querySnapshot) => {
-            console.log("From playlist:", querySnapshot.data().songs)
-            setSongIDs(querySnapshot.data().songs);
-            console.log("from songIDs:", songIDs);
-        }).then(() => {
-            // fetch songs for songs collection
-            if (songIDs.length > 0) {
-                console.log("There are songs:", songIDs);
-                firebase.firestore().collection('songs')
-                .where(firebase.firestore.FieldPath.documentId(), 'in', songIDs).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((song) => {
-                        // song.data() is never undefined for query doc snapshots
-                        let currentID = song.id;
-                        console.log(currentID);
-                        let appObj = { ...song.data(), ['id']: currentID };
-                        savedSongs.push(appObj);
-                    });
-                    setData(savedSongs);
-                })
-                .catch((e) => console.log("Error getting documents: ", e))
+        return playlistRef.onSnapshot(querySnapshot => {
+            const songIDArray = querySnapshot.data().songs;
+            console.log(songIDArray);
+            setSongIDs(songIDArray);
+            if(loadingSongIDs) {
+                console.log("loaded song array of size:", songIDs.length);
+                setLoadingSongIDs(false);
             }
-        })
-        .catch((e) => console.log("Error getting documents: ", e))
-        .finally(() => setLoading(false))
+        });
     }, []);
+    useEffect(() => {
+        if (songIDs.length > 0) {
+            return songsQueryRef
+            .where(firebase.firestore.FieldPath.documentId(), 'in', songIDs)
+            .onSnapshot(querySnapshot => {
+                const songs = [];          
+                querySnapshot.forEach(song => {
+                    const { access, artistID, artistName, 
+                        publicMeta, songTitle, songURL } = song.data();
+                    songs.push({
+                        id: song.id,
+                        access, artistID, artistName, 
+                        publicMeta, songTitle, songURL,
+                    });
+                });
+                setData(songs);
+                console.log("set data");
+                if (loading) {
+                    console.log("finished loading data");
+                    setLoading(false);
+                }
+            });
+        } else {
+            return (() => { 
+                if(loading) {
+                    console.log("no data to load");
+                    setLoading(false);
+                }
+            });
+        }
+    }, [!loadingSongIDs]);
 
     return (
         <View style={styles.container}>
         {loading ? <Loading/> :
             [(isOwner ?
                 <TouchableOpacity
+                    key="addSongs"
                     style={styles.button}
                     onPress={() => alert("bloop")}>
                     <Text style={styles.buttonTitle}>Add Songs</Text>
                 </TouchableOpacity> :
-                <Text>save</Text>
-            ), ( <DisplayList data={data} navigation={navigation}/> )
+                <TouchableOpacity
+                    style={styles.button}
+                    key="save"
+                    onPress={() => alert("Save")}>
+                    <Text style={styles.buttonTitle}>Add Songs</Text>
+                </TouchableOpacity>
+            ), ( <DisplayList key="DisplayListPlaylist" data={data} navigation={navigation}/> )
             ]
         }
         </View>
