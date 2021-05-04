@@ -18,12 +18,26 @@ export default function EditProfileScreen( { navigation, route })
     const [userName, setUserName] = useState('');
     const [bio, setBio] = useState('');
 
-    const handleSubmit = () -> {
-	const data = {
-	    artistBio: bio,
-	    email_d: email,
-	    username_d: userName,
-	    userType_d: userData.userType_d
+    const [isArtist, setIsArtist] = userState(false);
+
+    const handleSubmit = () => {
+
+	if (isArtist)
+	{
+	    const data = {
+		artistBio: bio,
+		email_d: email,
+		username_d: userName,
+		userType_d: userData.userType_d
+	    }
+	}
+	else
+	{
+	    const data = {
+		email_d: email,
+		username_d: userName,
+		userType_d: userData.userType_d
+	    }
 	}
 
 	const res = usersRef.doc(artistID).set(data);
@@ -38,6 +52,11 @@ export default function EditProfileScreen( { navigation, route })
 	    } else {
 		const userDoc = doc.data();
 		setUserData(userDoc);
+
+		if (userData.userType_d == "artist")
+		{
+		    setIsArtist(true);
+		}
 	    }
 	    console.log(userData)
 	    if (loading) {
@@ -64,14 +83,14 @@ export default function EditProfileScreen( { navigation, route })
 			value = {email}
 			onChange = {(text) => setEmail(text)}
 		    />
-		    <TextInput
+		    {isArtist && <TextInput
 			multiline
 			numberOfLine = {4}
 			placeholder = {userData.artistBio}
 			value = {bio}
 			onChangeText = {(text) => setBio(text)}
 			fullwidth
-		    />
+		    />}
 		</form>
 		<TouchableOpacity
 		    style = {styles.button}
