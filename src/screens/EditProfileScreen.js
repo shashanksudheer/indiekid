@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { firebase } from '../firebase/config';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AuthContext } from '../navigation/AuthProvider';
 import Loading from '../components/Loading';
 import styles from './styles';
@@ -21,7 +22,6 @@ export default function EditProfileScreen( { navigation, route })
     const [isArtist, setIsArtist] = useState(false);
 
     const handleSubmit = () => {
-
 	if (isArtist)
 	{
 	    const data = {
@@ -30,6 +30,8 @@ export default function EditProfileScreen( { navigation, route })
 		username_d: userName,
 		userType_d: userData.userType_d
 	    }
+
+	    const res = userRef.doc(user.uid).set(data);
 	}
 	else
 	{
@@ -38,11 +40,31 @@ export default function EditProfileScreen( { navigation, route })
 		username_d: userName,
 		userType_d: userData.userType_d
 	    }
+
+	    const res = userRef.doc(user.uid).set(data);
 	}
 
-	const res = userRef.doc(user.uid).set(data);
-
 	navigation.navigate("Settings");
+    }
+
+    // Was trying to force loop to occur until data is inputted
+    const handleNullData = () => {
+	console.log(userData);
+	if (userData != null)
+	{
+	    setUserName(userData.username_d);
+	    setEmail(userData.email_d);
+
+	    if (userData.userType_d == "artist")
+	    {
+		setIsArtist(true);
+		setBio(userData.artistBio);
+	    }
+	}
+	else
+	{
+	    handleNullData();
+	}
     }
 
     useEffect(() => {
@@ -55,9 +77,22 @@ export default function EditProfileScreen( { navigation, route })
 		    }
 		    console.log(userData)
 
-		    if (userData.userType_d == "artist") {
-		        setIsArtist(true);
+		    if (userData != null) {
+		        if (userData.userType_d == "artist")
+			{
+			    setIsArtist(true);
+
+			    setBio(userData.artistBio);
+			}
+
+			setUserName(userData.username_d);
+			setEmail(userData.email_d);
 		    }
+		    else
+		    {
+//			handleNullData();
+		    }
+
 		    if (loading) {
 		        setLoading(false);
 		    }
@@ -65,33 +100,47 @@ export default function EditProfileScreen( { navigation, route })
     }, []);
 
     return (
+	<View style = {styles.container}>
 	{loading ? <Loading/> : (
-	    <View style={styles.container}>
+	    <KeyboardAwareScrollView
+		style = {{flex: 1, width: '100%' }}
+		keyboardShouldPersistTaps = "always">
 		<Text> Edit Profile Screen </Text>
+		<Text> Username </Text>
 		<TextInput
-		    placeholder={userData.artistName}
+		    style = {styles.input}
+		    numberOfLine = {1}
 		    value={userName}
-		    onChange={(text) => setUserName(text)}
+		    onChangeText = {(text) => setUserName(text)}
+		    underlineColorAndroid='transparent'
+		    autoCapitalize='none'
 		/>
+		<Text> Email </Text>
 		<TextInput
-		    placeholder={userData.email_d}
+		    style = {styles.input}
+		    numberOfLine = {1}
 		    value={email}
-		    onChange={(text) => setEmail(text)}
+		    onChangeText = {(text) => setEmail(text)}
+		    underlineColorAndroid = 'transparent'
+		    autoCapitalize = 'none'
 		/>
-		{isArtist && <TextInput
-		    multiline
+		{isArtist && <><Text> Bio </Text>
+		<TextInput
+		    style = {styles.input}
 		    numberOfLine= {4}
-		    placeholder={userData.artistBio}
+		    multiline
 		    value={bio}
-		    onChangeText={(text) => setBio(text)}
-		    fullwidth
-		/>}
+		    onChangeText = {(text) => setBio(text)}
+		    underlineColorAndroid = 'transparent'
+		    autoCapitalize = 'none'
+		/></>}
 		<TouchableOpacity
 		    style={styles.button}
 		    onPress={handleSubmit}>
 		    <Text style={styles.buttonTitle}>Save</Text>
 		</TouchableOpacity>
-	    </View>
+	    </KeyboardAwareScrollView>
 	)}
+	</View>
     )
 }
