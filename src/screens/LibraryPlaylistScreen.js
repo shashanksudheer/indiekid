@@ -17,7 +17,7 @@ function DisplayList({ data, navigation }) {
                         style={styles.textButton}
                         key={item.id}
                         onPress={() => {
-                            navigation.navigate('playlistScreen', {playlistID: item.id});
+                            navigation.navigate('playlistScreen', {playlistID: item.id, contentName: item.contentName});
                     }}>
                     {item.contentName}
                     </Text>

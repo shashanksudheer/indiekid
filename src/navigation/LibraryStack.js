@@ -120,7 +120,7 @@ export default function LibraryStack() {
           name="playlistScreen"
           component={PlaylistScreen}
           options={({ navigation, route }) => ({
-            title: null,
+            title: route.params.contentName,
             headerLeft: () => (
               <Button
                 onPress={() => navigation.navigate("Library")}
@@ -134,10 +134,10 @@ export default function LibraryStack() {
           name="AddSongsToPlaylist"
           component={AddSongsPlaylistScreen}
           options={({ navigation, route }) => ({
-            title: null,
+            title: route.params.contentName,
             headerLeft: () => (
               <Button
-                onPress={() => navigation.navigate("Library")}
+                onPress={() => navigation.navigate("playlistScreen", )}
                 title="< Back"
                 color="white"
               />

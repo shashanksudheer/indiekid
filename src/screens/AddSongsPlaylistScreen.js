@@ -50,7 +50,7 @@ export default function AddSongsPlaylistScreen({ navigation, route })
 	    		playlistRef.update({
 	  				songs: firebase.firestore.FieldValue.arrayUnion(select.value)
 				});
-	    		navigation.navigate('Library')
+	    		navigation.navigate('playlistScreen');
 	    	} catch (e) {
 	    		console.log(e);
 	    	}

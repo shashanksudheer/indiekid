@@ -18,14 +18,7 @@ function DisplayList({ data, navigation }) {
                         style={styles.text}
                         key={item.id}>
                         {item.songTitle} by{' '}
-                        <Text
-                            style={styles.textButton}
-                            onPress={() => {
-                                navigation.navigate('ArtistPage', {
-                                    artistID: item.artistID,
-                                    artistName: item.artistName,
-                                });
-                        }}>
+                        <Text style={styles.text}>
                         {item.artistName}
                         </Text>
                     </Text>
@@ -42,7 +35,7 @@ function DisplayList({ data, navigation }) {
 export default function PlaylistScreen({ navigation, route })
 {
     const { user } = useContext(AuthContext);
-    const { playlistID } = route.params;
+    const { playlistID, contentName } = route.params;
 
     const [loadingSongIDs, setLoadingSongIDs] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -59,7 +52,7 @@ export default function PlaylistScreen({ navigation, route })
 
 // clear states on load
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+        const unsubscribe = navigation.addListener('beforeRemove', () => {
             console.log("in listener")
             setIsOwner(false);
             setSongIDs([]);
@@ -129,7 +122,7 @@ export default function PlaylistScreen({ navigation, route })
                 <TouchableOpacity
                     key="addSongs"
                     style={styles.button}
-                    onPress={() => navigation.navigate("AddSongsToPlaylist", { playlistID })}>
+                    onPress={() => navigation.navigate("AddSongsToPlaylist", { playlistID, contentName })}>
                     <Text style={styles.buttonTitle}>Add Songs</Text>
                 </TouchableOpacity> :
                 <TouchableOpacity

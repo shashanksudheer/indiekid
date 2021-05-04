@@ -100,26 +100,23 @@ function DisplayList({ artistID, artistBio, navigation }) {
 export default function ArtistPageScreen({ navigation, route })
 {
 	const [loading, setLoading] = useState(true);
-	const [userData, setUserData] = useState([]);
+	const [userData, setUserData] = useState(null);
 
-	const { artistID } = route.params;
+	const { artistID, artistName } = route.params;
+
     useEffect(() => {
-        const userDoc = [];
-		usersRef.doc(artistID)
-		.get()
-        .then((doc) => {
-		    if (!doc.exists) {
+        return usersRef.doc(artistID).onSnapshot(doc => {
+            if (!doc.exists) {
                 console.log('Artist Page: User not found');
-                // console.log(artistID);
             } else {
-                userDoc.push(doc.data());
+                const userDoc = doc.data();
+                setUserData(userDoc);
             }
-        })
-        .then(() => {
-            setUserData(userDoc);
-        })
-        .catch((e) => console.error(e))
-		.finally(() => setLoading(false));
+            console.log(userData)
+            if(loading) {
+                setLoading(false);
+            }
+        });
     }, []);
 
 	return (
@@ -128,9 +125,9 @@ export default function ArtistPageScreen({ navigation, route })
             	<>
                     <Text
                         style={styles.title}>
-                        {route.params.artistName}
+                        {artistName}
                     </Text>
-                    <DisplayList artistID={artistID} artistBio={userData[0].artistBio} navigation={navigation}/>
+                    <DisplayList artistID={artistID} artistBio={userData.artistBio} navigation={navigation}/>
                 </>
             )}
             </View>

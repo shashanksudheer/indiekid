@@ -27,7 +27,7 @@ export default function DiscoverStack() {
           name="ArtistPage"
           component={ArtistPageScreen}
           options={({ route }) => ({
-            title: route.params.artistName,
+            title: null,
           })}
         />
         <Stack.Screen
