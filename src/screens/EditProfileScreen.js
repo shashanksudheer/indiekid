@@ -40,60 +40,58 @@ export default function EditProfileScreen( { navigation, route })
 	    }
 	}
 
-	const res = usersRef.doc(user.uid).set(data);
+	const res = userRef.doc(user.uid).set(data);
 
 	navigation.navigate("Settings");
-    };
+    }
 
     useEffect(() => {
 		return userRef.doc(user.uid).onSnapshot(doc => {
 		    if (!doc.exists) {
-				console.log('Edit Profile: User not found');
+			console.log('Edit Profile: User not found');
 		    } else {
-				const userDoc = doc.data();
-				setUserData(userDoc);
+			const userDoc = doc.data();
+			setUserData(userDoc);
 		    }
 		    console.log(userData)
-		}).then(() => {
-			if (userData.userType_d == "artist") {
-			    setIsArtist(true);
-			}
-			if (loading) {
-				setLoading(false);
+
+		    if (userData.userType_d == "artist") {
+		        setIsArtist(true);
+		    }
+		    if (loading) {
+		        setLoading(false);
 		    }
 		});
     }, []);
 
     return (
-        <View style={styles.container}>
-            <Text> Edit Profile Screen </Text>
-				{loading ? <Loading/> : (
-					<View style={styles.container}>
-					    <TextInput
-						placeholder={userData.artistName}
-						value={userName}
-						onChange={(text) => setUserName(text)}
-					    />
-					    <TextInput
-						placeholder={userData.email_d}
-						value={email}
-						onChange={(text) => setEmail(text)}
-					    />
-					    {isArtist && <TextInput
-						multiline
-						numberOfLine= {4}
-						placeholder={userData.artistBio}
-						value={bio}
-						onChangeText={(text) => setBio(text)}
-						fullwidth
-					    />}
-						<TouchableOpacity
-						    style={styles.button}
-						    onPress={handleSubmit}>
-						    <Text style={styles.buttonTitle}>Save</Text>
-						</TouchableOpacity>
-					</View>
-				)}
-		</View>
+	{loading ? <Loading/> : (
+	    <View style={styles.container}>
+		<Text> Edit Profile Screen </Text>
+		<TextInput
+		    placeholder={userData.artistName}
+		    value={userName}
+		    onChange={(text) => setUserName(text)}
+		/>
+		<TextInput
+		    placeholder={userData.email_d}
+		    value={email}
+		    onChange={(text) => setEmail(text)}
+		/>
+		{isArtist && <TextInput
+		    multiline
+		    numberOfLine= {4}
+		    placeholder={userData.artistBio}
+		    value={bio}
+		    onChangeText={(text) => setBio(text)}
+		    fullwidth
+		/>}
+		<TouchableOpacity
+		    style={styles.button}
+		    onPress={handleSubmit}>
+		    <Text style={styles.buttonTitle}>Save</Text>
+		</TouchableOpacity>
+	    </View>
+	)}
     )
 }
