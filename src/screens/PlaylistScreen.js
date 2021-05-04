@@ -129,14 +129,14 @@ export default function PlaylistScreen({ navigation, route })
                 <TouchableOpacity
                     key="addSongs"
                     style={styles.button}
-                    onPress={() => alert("bloop")}>
+                    onPress={() => navigation.navigate("AddSongsToPlaylist", { playlistID })}>
                     <Text style={styles.buttonTitle}>Add Songs</Text>
                 </TouchableOpacity> :
                 <TouchableOpacity
                     style={styles.button}
                     key="save"
                     onPress={() => alert("Save")}>
-                    <Text style={styles.buttonTitle}>Add Songs</Text>
+                    <Text style={styles.buttonTitle}>Save</Text>
                 </TouchableOpacity>
             ), ( <DisplayList key="DisplayListPlaylist" data={data} navigation={navigation}/> )
             ]

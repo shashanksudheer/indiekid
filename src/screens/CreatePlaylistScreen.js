@@ -55,7 +55,7 @@ export default function NewContentScreen({navigation})
                 } catch (e) {
                     console.log(e);
                 }
-                navigation.navigate('playlistScreen', {playlistID: result.id});
+                navigation.navigate('playlistScreen', { playlistID: result.id });
             }).catch((e) => {
                 alert(e);
                 console.log(e);

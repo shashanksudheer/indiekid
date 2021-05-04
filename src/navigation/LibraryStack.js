@@ -8,7 +8,8 @@ import { firebase } from '../firebase/config';
 import { 
   LibraryScreen, ArtistPageScreen, DiscographyScreen, 
   CreatePlaylistScreen, CreateAlbumScreen, CreateSingleScreen,
-  BlankScreen, PlaylistScreen, LibraryPlaylistScreen
+  BlankScreen, PlaylistScreen, LibraryPlaylistScreen,
+  AddSongsPlaylistScreen
 } from '../screens';
 
 const Stack = createStackNavigator();
@@ -118,6 +119,20 @@ export default function LibraryStack() {
         <Stack.Screen
           name="playlistScreen"
           component={PlaylistScreen}
+          options={({ navigation, route }) => ({
+            title: null,
+            headerLeft: () => (
+              <Button
+                onPress={() => navigation.navigate("Library")}
+                title="< Back"
+                color="white"
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="AddSongsToPlaylist"
+          component={AddSongsPlaylistScreen}
           options={({ navigation, route }) => ({
             title: null,
             headerLeft: () => (
