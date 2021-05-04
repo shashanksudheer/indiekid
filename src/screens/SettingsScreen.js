@@ -13,7 +13,9 @@ export default function SettingsScreen({ navigation })
         <View style={styles.container}>
             <TouchableOpacity
                 style={styles.button}
-                onPress={()=> navigation.navigate('EditProfile')}>
+                onPress={()=> navigation.navigate('EditProfile', {
+		    userID: user.uid
+		})}>
                 <Text style={styles.buttonTitle}>Edit Profile</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => logout()}>
