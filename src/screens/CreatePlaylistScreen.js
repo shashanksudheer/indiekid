@@ -80,7 +80,14 @@ export default function NewContentScreen({navigation})
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => makePlaylist(playlistName, access)}>
+                    onPress={() => {
+                        if (playlistName === '') {
+                            alert("Playlist must have a name");
+                        } else {
+                            makePlaylist(playlistName, access);
+                        }
+                    }
+                }>
                     <Text style={styles.buttonTitle}>Create Playlist</Text>
                 </TouchableOpacity>
             </KeyboardAwareScrollView>

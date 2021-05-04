@@ -9,7 +9,7 @@ import {
   LibraryScreen, ArtistPageScreen, DiscographyScreen, 
   CreatePlaylistScreen, CreateAlbumScreen, CreateSingleScreen,
   BlankScreen, PlaylistScreen, LibraryPlaylistScreen,
-  AddSongsPlaylistScreen
+  AddSongsPlaylistScreen, UploadSongsScreen, LibraryMyContentScreen,
 } from '../screens';
 
 const Stack = createStackNavigator();
@@ -20,6 +20,17 @@ const FanNewContentTab = createMaterialTopTabNavigator();
 function MyLibraryTab() {
   return (
     <LibraryTab.Navigator>
+      <LibraryTab.Screen name="Songs" component={LibraryScreen} />
+      <LibraryTab.Screen name="Artists" component={BlankScreen} />
+      <LibraryTab.Screen name="Playlists" component={LibraryPlaylistScreen} />
+    </LibraryTab.Navigator>
+  );
+}
+
+function ArtistLibraryTab() {
+  return (
+    <LibraryTab.Navigator>
+      <LibraryTab.Screen name="My Content" component={LibraryMyContentScreen} />
       <LibraryTab.Screen name="Songs" component={LibraryScreen} />
       <LibraryTab.Screen name="Artists" component={BlankScreen} />
       <LibraryTab.Screen name="Playlists" component={LibraryPlaylistScreen} />
@@ -76,7 +87,7 @@ export default function LibraryStack() {
       >
         <Stack.Screen
           name="Library"
-          component={MyLibraryTab}
+          component={ userType === "artist" ? ArtistLibraryTab : MyLibraryTab }
           options={({ navigation }) => ({
             title: "My Library",
             headerRight: () => (
@@ -106,12 +117,12 @@ export default function LibraryStack() {
           name="Discography"
           component={DiscographyScreen}
           options={({ route }) => ({
-            title: null,
+            title: route.params.contentName,
           })}
         />
         <Stack.Screen
           name="NewContent"
-          component={ userType === "artist" ? ArtistContentTabs : FanContentTabs}
+          component={ userType === "artist" ? ArtistContentTabs : FanContentTabs }
           options={() => ({
             title: "Create Content",
           })}
@@ -137,7 +148,21 @@ export default function LibraryStack() {
             title: route.params.contentName,
             headerLeft: () => (
               <Button
-                onPress={() => navigation.navigate("playlistScreen", )}
+                onPress={() => navigation.navigate("playlistScreen")}
+                title="< Back"
+                color="white"
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="UploadSongs"
+          component={UploadSongsScreen}
+          options={({ navigation, route }) => ({
+            title: route.params.contentName,
+            headerLeft: () => (
+              <Button
+                onPress={() => navigation.navigate("Library")}
                 title="< Back"
                 color="white"
               />

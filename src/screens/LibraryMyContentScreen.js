@@ -12,59 +12,59 @@ export default function LibraryScreen({ navigation })
     const [data, setData] = useState([]);
     const { user } = useContext(AuthContext);
     const userRef = firebase.firestore().collection('users').doc(user.uid);
-    const playlistsRef = firebase.firestore().collection('users')
+    const audioContentRef = firebase.firestore().collection('users')
         .doc(user.uid).collection('audioContent')
-        .where("contentType", "==", "playlist");
+        .where("contentType", "!=", "playlist");
 
     useEffect(() => {
-        return playlistsRef.onSnapshot(querySnapshot => {
-            const playlists = [];
-            querySnapshot.forEach(playlist => {
-                const { contentName, songs, access, published, ownerID, ownerName } = playlist.data();
+        return audioContentRef.onSnapshot(querySnapshot => {
+            const audioContent = [];
+            querySnapshot.forEach(content => {
+                const { contentName, songs, access, published, contentType, credits } = content.data();
                 var accessFalse = access;
                 if (accessFalse === "private") {
                     accessFalse = "public";
                 } else if (accessFalse === "public") {
                     accessFalse = "private";
                 }
-                playlists.push({
-                    id: playlist.id,
+                audioContent.push({
+                    id: content.id,
+                    credits,
                     contentName,
+                    contentType,
                     access,
                     published,
                     songs,
-                    ownerID,
-                    ownerName,
                     accessFalse: accessFalse,
                 });
             });
-            setData(playlists);
-            if(loading) {
+            setData(audioContent);
+            if (loading) {
                 setLoading(false);
             }
         });
     }, []);
 
-    const deletePlaylist = async (playlistID, contentName) => {
+    const deleteContent = async (contentID, contentName) => {
         try {
-            userRef.collection('audioContent').doc(playlistID).delete();
+            userRef.collection('audioContent').doc(contentID).delete();
             alert(contentName + " was deleted");
         } catch (e) {
             console.log(e);
         }
     }
 
-    const setAccess = async (playlistID, contentName, access) => {
+    const setAccess = async (contentID, contentName, access) => {
         if (access === "private" ) {
             try {
-                userRef.collection('audioContent').doc(playlistID).update({access: "public"});
+                userRef.collection('audioContent').doc(contentID).update({access: "public"});
                 alert(contentName + " was made public");
             } catch (e) {
                 console.log(e);
             }
         } else if (access === "public") {
             try {
-                userRef.collection('audioContent').doc(playlistID).update({access: "private"});
+                userRef.collection('audioContent').doc(contentID).update({access: "private"});
                 alert(contentName + " was made private");
             } catch (e) {
                 console.log(e);
@@ -78,32 +78,31 @@ export default function LibraryScreen({ navigation })
             <View style={styles.container}>
                 {loading ? <Loading/> : (
                     <ScrollView style={{ width:"95%", padding: 2 }}>
-                        {data.map(playlist => 
-                            <Card key={playlist.id} style={{
+                        {data.map(content => 
+                            <Card key={content.id} style={{
                                 width: "100%",
                                 margin: 5,
                             }}>
                                 <Card.Content>
-                                    <Title>{playlist.contentName}</Title>
-                                    <Paragraph>{playlist.ownerName}</Paragraph>
+                                    <Title>{content.contentName}</Title>
+                                    <Paragraph>{content.contentType.toUpperCase()}</Paragraph>
+                                    <Paragraph>{content.credits}</Paragraph>
                                 </Card.Content>
                                 <Card.Actions>
                                     <Button 
                                     mode="default"
                                     onPress={() => {
-                                            navigation.navigate('playlistScreen', {
-                                                playlistID: playlist.id,
-                                                contentName: playlist.contentName
+                                            navigation.navigate('Discography', {
+                                                contentID: content.id,
+                                                contentName: content.contentName
                                             });
-                                    }}>Go to Playlist</Button>
+                                    }}>Go to content</Button>
                                     <Button
-                                    disabled={playlist.ownerID !== user.uid}
                                     mode="default"
-                                    onPress={() => deletePlaylist(playlist.id, playlist.contentName)}>Delete</Button>
+                                    onPress={() => deleteContent(content.id, content.contentName)}>Delete</Button>
                                     <Button
-                                    disabled={playlist.ownerID !== user.uid}
                                     mode="default"
-                                    onPress={() => setAccess(playlist.id, playlist.contentName, playlist.access)}>Make {playlist.accessFalse}</Button>
+                                    onPress={() => setAccess(content.id, content.contentName, content.access)}>Make {content.accessFalse}</Button>
                                 </Card.Actions>
                             </Card>
                         )}

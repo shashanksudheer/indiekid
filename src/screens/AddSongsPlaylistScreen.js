@@ -46,16 +46,20 @@ export default function AddSongsPlaylistScreen({ navigation, route })
     }, []);
 
     const addSongs = async (selected, navigation) => {
-    	selected.forEach(select => {
-	    	try {
-	    		playlistRef.update({
-	  				songs: firebase.firestore.FieldValue.arrayUnion(select.value)
-				});
-	    		navigation.navigate('playlistScreen');
-	    	} catch (e) {
-	    		console.log(e);
-	    	}
-    	})
+        if (selected.length > 0) {
+        	selected.forEach(select => {
+    	    	try {
+    	    		playlistRef.update({
+    	  				songs: firebase.firestore.FieldValue.arrayUnion(select.value)
+    				});
+    	    	} catch (e) {
+    	    		console.log(e);
+    	    	}
+        	});
+            navigation.navigate('playlistScreen');
+        } else {
+            alert("No songs selected. If none are available, go save some songs!");
+        }
     }
 
     return (

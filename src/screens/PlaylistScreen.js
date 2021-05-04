@@ -143,10 +143,8 @@ export default function PlaylistScreen({ navigation, route })
                                     mode="default"
                                     onPress={() => {
                                             navigation.navigate('Discography', {
-                                                songID: song.id,
-                                                songTitle: song.songTitle,
-                                                artistID: song.artistID,
-                                                artistName: song.artistName,
+                                                contentID: song.id,
+                                                contentName: song.songTitle,
                                             });
                                     }}>Go to Song</Button>
                                     <Button
