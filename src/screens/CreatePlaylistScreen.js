@@ -33,12 +33,10 @@ export default function NewContentScreen({navigation})
             access: access,
             contentName: playlistName,
             contentType: 'playlist',
+            ownerID: user.uid,
+            ownerName: user.displayName,
             published: firebase.firestore.Timestamp.now(),
             songs: []
-        };
-        const privData = {
-            owner: user.uid,
-            editors: []
         };
         console.log(data);
         try {
@@ -48,15 +46,8 @@ export default function NewContentScreen({navigation})
             .then( async (result) => {
             // creates the playlist in the user's audioConetent collection in firestore
                 console.log("Successfully added new playlist with ID:", result.id);
-                try {
-                    await firebase.firestore().collection('users').doc(user.uid)
-                    .collection('audioContent').doc(result.id)
-                    .collection('private').doc('private').set(privData);
-                } catch (e) {
-                    console.log(e);
-                }
                 navigation.navigate('playlistScreen', { playlistID: result.id,
-                    contentName: contentName });
+                    contentName: result.contentName });
             }).catch((e) => {
                 alert(e);
                 console.log(e);

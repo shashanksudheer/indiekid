@@ -1,36 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View, FlatList } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Text, View, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { Button, Card, Title, Paragraph } from 'react-native-paper';
 import Loading  from '../components/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
 import { firebase } from '../firebase/config';
 import styles from './styles';
 // displays a playlist. if owner of playlist accesses playlist page, then
 // add songs button shows.
-function DisplayList({ data, navigation }) {
-    if (data.length !== 0) {
-        return (
-            <FlatList
-                data={data}
-                keyExtractor={({ id }, index) => id}
-                renderItem={({ item }) => (
-                    <Text 
-                        style={styles.text}
-                        key={item.id}>
-                        {item.songTitle} by{' '}
-                        <Text style={styles.text}>
-                        {item.artistName}
-                        </Text>
-                    </Text>
-                )}
-            />
-        );
-    } else {
-        return (
-            <Text style={styles.text}>This playlist doesn't have any songs...yet!</Text>
-        );
-    }
-}
 
 export default function PlaylistScreen({ navigation, route })
 {
@@ -43,11 +19,11 @@ export default function PlaylistScreen({ navigation, route })
     const [data, setData] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
 
-    const ownershipRef = firebase.firestore().collection('users')
-        .doc(user.uid).collection('audioContent')
-        .doc(playlistID).collection('private').doc('private');
+    const userRef = firebase.firestore().collection('users');
     const playlistRef = firebase.firestore().collection('users')
         .doc(user.uid).collection('audioContent').doc(playlistID);
+    const audioContentRef = firebase.firestore().collection('users')
+        .doc(user.uid).collection('audioContent');
     const songsQueryRef = firebase.firestore().collection('songs');
 
 // clear states on load
@@ -64,9 +40,9 @@ export default function PlaylistScreen({ navigation, route })
     }, [navigation]);
 // check ownership
     useEffect(() => {
-        return ownershipRef.onSnapshot(result => {
-            if (result.data().owner === user.uid) {
-                console.log("ownership matched")
+        return playlistRef.onSnapshot(result => {
+            if (result.data().ownerID === user.uid) {
+                console.log("ownership matched");
                 setIsOwner(true);
             }
         });
@@ -115,6 +91,27 @@ export default function PlaylistScreen({ navigation, route })
         }
     }, [!loadingSongIDs]);
 
+    const removeFromPlaylist = async (songID, songTitle) => {
+        try {
+            playlistRef.update({
+                songs: firebase.firestore.FieldValue.arrayRemove(songID),
+            });
+            alert(songTitle + " was removed from the playlist");
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    const savePlaylist = async (playlistID) => {
+        try {
+            playlistRef.update({
+                songs: firebase.firestore.FieldValue.arrayRemove(songID),
+            });
+            alert(songTitle + " was removed from the playlist");
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
         <View style={styles.container}>
         {loading ? <Loading/> :
@@ -131,7 +128,35 @@ export default function PlaylistScreen({ navigation, route })
                     onPress={() => alert("Save")}>
                     <Text style={styles.buttonTitle}>Save</Text>
                 </TouchableOpacity>
-            ), ( <DisplayList key="DisplayListPlaylist" data={data} navigation={navigation}/> )
+            ), ( <ScrollView key="scrollList" style={{ width:"95%", padding: 2 }}>
+                        {data.map(song => 
+                            <Card key={song.id} style={{
+                                width: "100%",
+                                margin: 5,
+                            }}>
+                                <Card.Content>
+                                    <Title>{song.songTitle}</Title>
+                                    <Paragraph>{song.artistName}</Paragraph>
+                                </Card.Content>
+                                <Card.Actions>
+                                    <Button 
+                                    mode="default"
+                                    onPress={() => {
+                                            navigation.navigate('Discography', {
+                                                songID: song.id,
+                                                songTitle: song.songTitle,
+                                                artistID: song.artistID,
+                                                artistName: song.artistName,
+                                            });
+                                    }}>Go to Song</Button>
+                                    <Button
+                                    disabled={!isOwner}
+                                    mode="default"
+                                    onPress={() => removeFromPlaylist(song.id, song.songTitle)}>Remove</Button>
+                                </Card.Actions>
+                            </Card>
+                        )}
+                    </ScrollView> )
             ]
         }
         </View>

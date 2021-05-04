@@ -29,11 +29,12 @@ export default function AddSongsPlaylistScreen({ navigation, route })
             const savedSongs = [];
             querySnapshot.forEach(song => {
 				if(song.id) {
-					const { songTitle, artistID, artistName } = song.data();
+					const { songTitle, artistName } = song.data();
 	                const songLabel = songTitle + ' ' + 'by' + ' ' + artistName;
 	                savedSongs.push({
 	                	label: songLabel,
 	                    value: song.id,
+                        extraData: songTitle,
 	                });
 		        }
             });
