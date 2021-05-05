@@ -281,8 +281,12 @@ export default function UploadSongsScreen({ navigation, route })
     return (
             <View style={styles.container}>
                 {loading ? <Loading/> : (
-                	<View style={styles.container}>
+                	<KeyboardAwareScrollView 
+                            key="scrollList" 
+                            style={{ width:"95%", padding: 2 }}
+                            showsVerticalScrollIndicator={false}>
                         <Modal
+                            key="newsong"
                             animationType="slide"
                             transparent={true}
                             visible={modalVisible}
@@ -300,7 +304,6 @@ export default function UploadSongsScreen({ navigation, route })
                                     />
                                     <TextInput
                                         style={modalStyles.input}
-                                        multiline={true}
                                         placeholder='Duration in seconds'
                                         placeholderTextColor="#aaaaaa"
                                         onChangeText={(text) => {
@@ -313,11 +316,9 @@ export default function UploadSongsScreen({ navigation, route })
                                         }}
                                         value={duration.toString()}
                                         underlineColorAndroid="transparent"
-                                        autoCapitalize="none"
                                     />
                                     <TextInput
                                         style={modalStyles.longInput}
-                                        multiline={true}
                                         placeholder='Comma Separated Genres'
                                         placeholderTextColor="#aaaaaa"
                                         onChangeText={(text) => {
@@ -330,7 +331,6 @@ export default function UploadSongsScreen({ navigation, route })
                                     />
                                     <TextInput
                                         style={modalStyles.longInput}
-                                        multiline={true}
                                         placeholder='Select File'
                                         placeholderTextColor="#aaaaaa"
                                         onChangeText={(text) => setSongURL(text)}
@@ -359,6 +359,7 @@ export default function UploadSongsScreen({ navigation, route })
                             </View>
                         </Modal>
                         <Modal
+                            key="existingSongs"
                             animationType="slide"
                             transparent={true}
                             visible={modalVisible2}
@@ -405,7 +406,10 @@ export default function UploadSongsScreen({ navigation, route })
                             <Text style={styles.buttonTitle}>Cancel</Text>
                         </TouchableOpacity>
                         <Text style={styles.title}>Songs to be Added:</Text>
-                		<KeyboardAwareScrollView key="scrollList" style={{ width:"95%", padding: 2 }}>
+                		<KeyboardAwareScrollView 
+                            key="scrollList" 
+                            style={{ width:"95%", padding: 2 }}
+                            showsVerticalScrollIndicator={false}>
                             {data.map(song => 
                                 <Card key={song.id} style={{
                                     width: "90%",
@@ -431,7 +435,7 @@ export default function UploadSongsScreen({ navigation, route })
                             onPress={() => uploadSongs(data, songIDs)}>
                             <Text style={styles.buttonTitle}>Add Songs to Content</Text>
                         </TouchableOpacity>
-	                </View>
+	                </KeyboardAwareScrollView>
                 )}
             </View>
     )

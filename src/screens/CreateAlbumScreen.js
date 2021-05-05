@@ -1,21 +1,108 @@
 import React, { useState, useContext } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View, Keyboard } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { firebase } from '../firebase/config';
+import { AuthContext } from '../navigation/AuthProvider';
 import RadioButton from '../components/RadioButton';
+import { firebase } from '../firebase/config';
 import styles from './styles';
 
-// this page should be available to both artists and fans.
-// new content that fans can create are playlists.
-// artists can create songs, videos, as well as playlists. Everything 
-// except the playlists should be hidden from fans. Artists should
-// have an extra option to choose whether to make a playlist available
-// on their artist page.
-export default function NewContentScreen({ navigation })
+const RadioOptions = [
+    {
+        key: 'private',
+        text: 'private album',
+    },
+    {
+        key: 'public',
+        text: 'public album',
+    },
+];
+
+export default function NewContentScreen({navigation})
 {
+    const [singleName, setSingleName] = useState('');
+    const [credits, setCredits] = useState('');
+    const [access, setAccess] = useState('private');
+
+    const { user } = useContext(AuthContext);
+
+    const onSelect = (item) => {
+        setAccess(item.key);
+    };
+
+    const makeSingle = async (singleName, credits, access) => {
+        const data = {
+            access: access,
+            contentName: singleName,
+            contentType: 'album',
+            credits: credits,
+            duration: 0,
+            published: firebase.firestore.Timestamp.now(),
+            songs: []
+        };
+        console.log(data);
+        try {
+            await firebase.firestore().collection('users')
+            .doc(user.uid).collection('audioContent')
+            .add(data)
+            .then((result) => {
+            // creates the playlist in the user's audioConetent collection in firestore
+                console.log("Successfully added new album with ID:", result.id);
+                Keyboard.dismiss();
+                navigation.navigate('UploadSongs', { contentID: result.id,
+                     contentName: result.contentName });
+            }).catch((e) => {
+                alert(e);
+                console.log(e);
+            });
+        } catch (e) {
+          alert(e);
+          console.log(e);
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <Text> Content </Text>
+            <KeyboardAwareScrollView
+                showsVerticalScrollIndicator={false}
+                style={{ flex: 1, width: '95%' }}
+                keyboardShouldPersistTaps="always">
+                <TextInput
+                    style={styles.input}
+                    placeholder='New Album'
+                    placeholderTextColor="#aaaaaa"
+                    onChangeText={(text) => setSingleName(text)}
+                    value={singleName}
+                    underlineColorAndroid="transparent"
+                />
+                <TextInput
+                    style={styles.longInput}
+                    multiline={true}
+                    placeholder='Credits'
+                    placeholderTextColor="#aaaaaa"
+                    onChangeText={(text) => setCredits(text)}
+                    value={credits}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <Text style={styles.text}>This is a</Text>
+                <RadioButton
+                    selectedOption={access}
+                    onSelect={onSelect}
+                    options={RadioOptions}
+                />
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        if (singleName === '') {
+                            alert("Single must have a name");
+                        } else {
+                            makeSingle(singleName, credits, access);
+                        }
+                    }
+                }>
+                    <Text style={styles.buttonTitle}>Pick Songs</Text>
+                </TouchableOpacity>
+            </KeyboardAwareScrollView>
         </View>
     )
 }

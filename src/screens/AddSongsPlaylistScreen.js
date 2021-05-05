@@ -56,7 +56,7 @@ export default function AddSongsPlaylistScreen({ navigation, route })
     	    		console.log(e);
     	    	}
         	});
-            navigation.navigate('playlistScreen');
+            navigation.navigate('playlistScreen', {playlistID: playlistID});
         } else {
             alert("No songs selected. If none are available, go save some songs!");
         }

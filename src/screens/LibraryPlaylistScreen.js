@@ -74,7 +74,9 @@ export default function LibraryScreen({ navigation })
     return (
             <View style={styles.container}>
                 {loading ? <Loading/> : (
-                    <ScrollView style={{ width:"95%", padding: 2 }}>
+                    <ScrollView
+                    style={{ width:"95%", padding: 2 }}
+                    showsVerticalScrollIndicator={false}>
                         {data.map(playlist => 
                             <Card key={playlist.id} style={{
                                 width: "100%",
@@ -83,6 +85,11 @@ export default function LibraryScreen({ navigation })
                                 <Card.Content>
                                     <Title>{playlist.contentName}</Title>
                                     <Paragraph>{playlist.ownerName}</Paragraph>
+                                    <Button
+                                    disabled={playlist.ownerID !== user.uid}
+                                    mode="contained"
+                                    style={{margin: 10}}
+                                    onPress={() => deletePlaylist(playlist.id, playlist.contentName)}>Delete</Button>
                                 </Card.Content>
                                 <Card.Actions>
                                     <Button 
@@ -93,10 +100,6 @@ export default function LibraryScreen({ navigation })
                                                 contentName: playlist.contentName
                                             });
                                     }}>Go to Playlist</Button>
-                                    <Button
-                                    disabled={playlist.ownerID !== user.uid}
-                                    mode="default"
-                                    onPress={() => deletePlaylist(playlist.id, playlist.contentName)}>Delete</Button>
                                     <Button
                                     disabled={playlist.ownerID !== user.uid}
                                     mode="default"

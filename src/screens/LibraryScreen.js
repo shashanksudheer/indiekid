@@ -45,7 +45,9 @@ export default function LibraryScreen({ navigation })
     return (
             <View style={styles.container}>
                 {loading ? <Loading/> : (
-                    <ScrollView style={styles.ScrollView}>
+                    <ScrollView 
+                    style={styles.ScrollView}
+                    showsVerticalScrollIndicator={false}>
                         {data.map(song => 
                             <Card key={song.id} style={{
                                 width: "100%",
@@ -54,6 +56,10 @@ export default function LibraryScreen({ navigation })
                                 <Card.Content>
                                     <Title>{song.songTitle}</Title>
                                     <Paragraph>{song.artistName}</Paragraph>
+                                    <Button 
+                                    mode="contained"
+                                    style={{margin: 10}}
+                                    onPress={() => unSaveSong(song.id, song.songTitle)}>Unsave</Button>
                                 </Card.Content>
                                 <Card.Actions>
                                     <Button 
@@ -74,9 +80,6 @@ export default function LibraryScreen({ navigation })
                                                 artistName: song.artistName,
                                             });
                                     }}>Go to Artist</Button>
-                                    <Button 
-                                    mode="default"
-                                    onPress={() => unSaveSong(song.id, song.songTitle)}>Unsave</Button>
                                 </Card.Actions>
                             </Card>
                         )}

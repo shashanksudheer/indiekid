@@ -152,13 +152,13 @@ export default function ArtistPageScreen({ navigation, route })
                                     <IconButton
                                         icon="play"
                                         color="#4F5FA0"
-                                        onPress={() => handlePlay(song.id, artistID, song.songTitle, artistName)}>Save
+                                        onPress={() => handlePlay(song.id)}>
                                         </IconButton>}
                                     right={props => 
                                         <IconButton
                                         icon="heart"
                                         color="#F89090"
-                                        onPress={() => saveSong(song.id, artistID, song.songTitle, artistName)}>Save
+                                        onPress={() => saveSong(song.id, artistID, song.songTitle, artistName)}>
                                         </IconButton>}
                                     onPress={() => alert("To Discography")}
                                 />

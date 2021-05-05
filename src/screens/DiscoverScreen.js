@@ -120,7 +120,9 @@ export default function DiscoverScreen( {navigation} )
 				value={searchQuery}
 				style={{ margin: 15 }}
 			/>
-			<KeyboardAwareScrollView style={{ width:"95%", padding: 2 }}>
+			<KeyboardAwareScrollView
+            style={{ width:"95%", padding: 2 }}
+            showsVerticalScrollIndicator={false}>
 			{discoverSongs.map(song => 
 				<Card key={song.id} style={{
 					width: "100%",

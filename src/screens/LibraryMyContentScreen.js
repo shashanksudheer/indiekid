@@ -76,7 +76,9 @@ export default function LibraryScreen({ navigation })
     return (
             <View style={styles.container}>
                 {loading ? <Loading/> : (
-                    <ScrollView style={{ width:"95%", padding: 2 }}>
+                    <ScrollView
+                    style={{ width:"95%", padding: 2 }}
+                    showsVerticalScrollIndicator={false}>
                         {data.map(content => 
                             <Card key={content.id} style={{
                                 width: "100%",
@@ -86,12 +88,15 @@ export default function LibraryScreen({ navigation })
                                     <Title>{content.contentName}</Title>
                                     <Paragraph>{content.contentType.toUpperCase()}</Paragraph>
                                     <Paragraph>{content.credits}</Paragraph>
-                                </Card.Content>
-                                <Card.Actions>
-                                <Button
-                                    mode="default"
+                                    <Button
+                                    mode="contained"
+                                    style={{margin: 10}}
                                     onPress={() => addSongs(content.id, content.contentName, navigation)}>Edit Songs</Button>
-                                </Card.Actions>
+                                    <Button
+                                    mode="contained"
+                                    style={{margin: 10}}
+                                    onPress={() => deleteContent(content.id, content.contentName)}>Delete</Button>
+                                </Card.Content>
                                 <Card.Actions>
                                     <Button 
                                     mode="default"
@@ -101,9 +106,6 @@ export default function LibraryScreen({ navigation })
                                                 contentName: content.contentName
                                             });
                                     }}>Go to content</Button>
-                                    <Button
-                                    mode="default"
-                                    onPress={() => deleteContent(content.id, content.contentName)}>Delete</Button>
                                     <Button
                                     mode="default"
                                     onPress={() => setAccess(content.id, content.contentName, content.access)}>Make {content.accessFalse}</Button>

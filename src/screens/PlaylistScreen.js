@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, FlatList } from 'react-native';
-import { Button, Card, Title, Paragraph } from 'react-native-paper';
+import { Button, IconButton, Card, Title, Paragraph } from 'react-native-paper';
 import Loading  from '../components/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
 import { firebase } from '../firebase/config';
@@ -39,7 +39,7 @@ export default function PlaylistScreen({ navigation, route })
     useEffect(() => {
         return playlistRef.onSnapshot(querySnapshot => {
             const songIDArray = querySnapshot.data().songs;
-            console.log(songIDArray);
+            // console.log(songIDArray);
             setSongIDs(songIDArray);
             if(loadingSongIDs) {
                 console.log("loaded song array of size:", songIDs.length);
@@ -78,6 +78,10 @@ export default function PlaylistScreen({ navigation, route })
             });
         }
     }, [!loadingSongIDs]);
+
+    const handlePlay = (songID) => {
+        alert("play");
+    }
 
     const removeFromPlaylist = async (songID, songTitle) => {
         try {
@@ -123,6 +127,11 @@ export default function PlaylistScreen({ navigation, route })
                                 <Card.Content>
                                     <Title>{song.songTitle}</Title>
                                     <Paragraph>{song.artistName}</Paragraph>
+                                    <IconButton
+                                        icon="play"
+                                        color="#4F5FA0"
+                                        onPress={() => handlePlay(song.id)}>
+                                        </IconButton>
                                 </Card.Content>
                                 <Card.Actions>
                                     <Button 
