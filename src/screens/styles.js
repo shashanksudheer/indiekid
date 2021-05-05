@@ -4,20 +4,25 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        marginTop: 30
+        width: '95%',
+        paddingTop: 35,
+        paddingBottom: 35,
+        paddingLeft: 15,
+        paddingRight: 15,
+    },
+    scrollView: {
+        flex: 1,
+        alignSelf: 'center',
+        paddingBottom: 20,
+        marginBottom: 50
     },
     title: {
         color: 'black',
-        alignSelf: "flex-start",
+        alignSelf: "center",
         fontWeight: 'bold',
-        fontSize: 20,
-        marginTop: 20,
-        marginLeft: 35,
-        marginRight: 35,
-    },
-    sectionContainer: {
-        alignItems: "flex-start",
-        marginTop: 5,
+        fontSize: 30,
+        padding: 20,
+
     },
     sectionTitle: {
         color: 'black',

@@ -45,7 +45,7 @@ export default function LibraryScreen({ navigation })
     return (
             <View style={styles.container}>
                 {loading ? <Loading/> : (
-                    <ScrollView style={{ width:"95%", padding: 2 }}>
+                    <ScrollView style={styles.ScrollView}>
                         {data.map(song => 
                             <Card key={song.id} style={{
                                 width: "100%",

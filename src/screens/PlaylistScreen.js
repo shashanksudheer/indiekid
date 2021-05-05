@@ -26,18 +26,6 @@ export default function PlaylistScreen({ navigation, route })
         .doc(user.uid).collection('audioContent');
     const songsQueryRef = firebase.firestore().collection('songs');
 
-// clear states on load
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('beforeRemove', () => {
-            console.log("in listener")
-            setIsOwner(false);
-            setSongIDs([]);
-            setData([]);
-            setLoadingSongIDs(true);
-            setLoading(true);
-        });
-        return unsubscribe;
-    }, [navigation]);
 // check ownership
     useEffect(() => {
         return playlistRef.onSnapshot(result => {
@@ -112,7 +100,7 @@ export default function PlaylistScreen({ navigation, route })
 
     return (
         <View style={styles.container}>
-        {loading ? <Loading/> :
+        {loading || loadingSongIDs ? <Loading/> :
             [(isOwner ?
                 <TouchableOpacity
                     key="addSongs"

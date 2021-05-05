@@ -87,7 +87,6 @@ export default function DiscoverScreen( {navigation} )
     	}
     	try {
     		userRef.collection('savedSongs').doc(songID).set(data);
-    		alert(songTitle + " was saved");
     	} catch (e) {
     		console.log(e);
     	}
