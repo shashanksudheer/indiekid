@@ -48,7 +48,6 @@ export default function LibraryScreen({ navigation })
     const deletePlaylist = async (playlistID, contentName) => {
         try {
             userRef.collection('audioContent').doc(playlistID).delete();
-            alert(contentName + " was deleted");
         } catch (e) {
             console.log(e);
         }
@@ -58,14 +57,12 @@ export default function LibraryScreen({ navigation })
         if (access === "private" ) {
             try {
                 userRef.collection('audioContent').doc(playlistID).update({access: "public"});
-                alert(contentName + " was made public");
             } catch (e) {
                 console.log(e);
             }
         } else if (access === "public") {
             try {
                 userRef.collection('audioContent').doc(playlistID).update({access: "private"});
-                alert(contentName + " was made private");
             } catch (e) {
                 console.log(e);
             }

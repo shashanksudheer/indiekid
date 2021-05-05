@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View, Keyboard } from 'react-native'
-import { Button, Card, Title, Paragraph } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AuthContext } from '../navigation/AuthProvider';
 import RadioButton from '../components/RadioButton';
@@ -64,7 +63,7 @@ export default function NewContentScreen({navigation})
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView
-                style={{ flex: 1, width: '100%' }}
+                style={{ flex: 1, width: '95%' }}
                 keyboardShouldPersistTaps="always">
                 <TextInput
                     style={styles.input}

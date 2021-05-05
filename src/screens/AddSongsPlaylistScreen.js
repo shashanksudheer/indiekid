@@ -1,6 +1,6 @@
 import  React, { useState, useContext, useEffect } from 'react';
 import { Text, View, TouchableOpacity, TextInput, Button, FlatList } from 'react-native';
-import SelectMultiple from 'react-native-select-multiple'
+import SelectMultiple from 'react-native-select-multiple';
 import { AuthContext } from '../navigation/AuthProvider';
 import { firebase } from '../firebase/config';
 import Loading  from '../components/Loading';

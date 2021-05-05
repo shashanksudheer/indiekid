@@ -37,7 +37,6 @@ export default function LibraryScreen({ navigation })
     const unSaveSong = async (songID, songTitle) => {
         try {
             userRef.collection('savedSongs').doc(songID).delete();
-            alert(songTitle + " was unsaved");
         } catch (e) {
             console.log(e);
         }

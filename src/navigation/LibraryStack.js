@@ -159,7 +159,7 @@ export default function LibraryStack() {
           name="UploadSongs"
           component={UploadSongsScreen}
           options={({ navigation, route }) => ({
-            title: "Upload",
+            title: route.params.contentName,
             headerLeft: null,
           })}
         />

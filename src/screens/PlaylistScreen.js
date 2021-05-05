@@ -96,7 +96,6 @@ export default function PlaylistScreen({ navigation, route })
             playlistRef.update({
                 songs: firebase.firestore.FieldValue.arrayRemove(songID),
             });
-            alert(songTitle + " was removed from the playlist");
         } catch (e) {
             console.log(e);
         }
@@ -106,7 +105,6 @@ export default function PlaylistScreen({ navigation, route })
             playlistRef.update({
                 songs: firebase.firestore.FieldValue.arrayRemove(songID),
             });
-            alert(songTitle + " was removed from the playlist");
         } catch (e) {
             console.log(e);
         }

@@ -52,7 +52,9 @@ export default function LibraryScreen({ navigation })
             console.log(e);
         }
     }
-
+    const addSongs = (contentID, contentName, navigation) => {
+        navigation.navigate('UploadSongs', {contentID: contentID, contentName: contentName})
+    }
     const setAccess = async (contentID, contentName, access) => {
         if (access === "private" ) {
             try {
@@ -85,6 +87,11 @@ export default function LibraryScreen({ navigation })
                                     <Paragraph>{content.contentType.toUpperCase()}</Paragraph>
                                     <Paragraph>{content.credits}</Paragraph>
                                 </Card.Content>
+                                <Card.Actions>
+                                <Button
+                                    mode="default"
+                                    onPress={() => addSongs(content.id, content.contentName, navigation)}>Edit Songs</Button>
+                                </Card.Actions>
                                 <Card.Actions>
                                     <Button 
                                     mode="default"

@@ -42,7 +42,7 @@ export default StyleSheet.create({
     },
     input: {
         height: 48,
-        color: 'grey',
+        color: '#252525',
         borderRadius: 5,
         overflow: 'hidden',
         backgroundColor: 'white',
@@ -54,7 +54,7 @@ export default StyleSheet.create({
     },
     longInput: {
         height: 100,
-        color: 'grey',
+        color: '#252525',
         borderRadius: 5,
         overflow: 'hidden',
         backgroundColor: 'white',
@@ -118,36 +118,5 @@ export default StyleSheet.create({
         marginTop: 35,
         marginLeft: 35,
         marginRight: 35,
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: "center"
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-    },
-    textStyleModal: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center",
-        padding: 10,
     },
 });
