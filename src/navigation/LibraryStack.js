@@ -20,7 +20,7 @@ const FanNewContentTab = createMaterialTopTabNavigator();
 function MyLibraryTab() {
   return (
     <LibraryTab.Navigator>
-      <LibraryTab.Screen name="Songs" component={LibraryScreen} />
+      <LibraryTab.Screen name="Saved Songs" component={LibraryScreen} />
       <LibraryTab.Screen name="Artists" component={BlankScreen} />
       <LibraryTab.Screen name="Playlists" component={LibraryPlaylistScreen} />
     </LibraryTab.Navigator>
@@ -31,7 +31,7 @@ function ArtistLibraryTab() {
   return (
     <LibraryTab.Navigator>
       <LibraryTab.Screen name="My Content" component={LibraryMyContentScreen} />
-      <LibraryTab.Screen name="Songs" component={LibraryScreen} />
+      <LibraryTab.Screen name="Saved Songs" component={LibraryScreen} />
       <LibraryTab.Screen name="Artists" component={BlankScreen} />
       <LibraryTab.Screen name="Playlists" component={LibraryPlaylistScreen} />
     </LibraryTab.Navigator>
@@ -159,14 +159,8 @@ export default function LibraryStack() {
           name="UploadSongs"
           component={UploadSongsScreen}
           options={({ navigation, route }) => ({
-            title: route.params.contentName,
-            headerLeft: () => (
-              <Button
-                onPress={() => navigation.navigate("Library")}
-                title="< Back"
-                color="white"
-              />
-            ),
+            title: "Upload",
+            headerLeft: null,
           })}
         />
     </Stack.Navigator>

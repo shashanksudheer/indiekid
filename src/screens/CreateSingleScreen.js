@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View, Keyboard } from 'react-native'
+import { Button, Card, Title, Paragraph } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AuthContext } from '../navigation/AuthProvider';
 import RadioButton from '../components/RadioButton';
@@ -47,7 +48,7 @@ export default function NewContentScreen({navigation})
             .then((result) => {
             // creates the playlist in the user's audioConetent collection in firestore
                 console.log("Successfully added new single with ID:", result.id);
-                alert("Single called \""+singleName+"\" was created.")
+                Keyboard.dismiss();
                 navigation.navigate('UploadSongs', { contentID: result.id,
                      contentName: result.contentName });
             }).catch((e) => {
@@ -99,7 +100,7 @@ export default function NewContentScreen({navigation})
                         }
                     }
                 }>
-                    <Text style={styles.buttonTitle}>Upload Songs</Text>
+                    <Text style={styles.buttonTitle}>Pick Songs</Text>
                 </TouchableOpacity>
             </KeyboardAwareScrollView>
         </View>

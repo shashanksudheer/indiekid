@@ -1,6 +1,7 @@
 import  React, { useState, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Searchbar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import 'react-native-gesture-handler';
 import { AuthContext } from '../navigation/AuthProvider';
 import { firebase } from '../firebase/config';
@@ -120,7 +121,7 @@ export default function DiscoverScreen( {navigation} )
 				value={searchQuery}
 				style={{ margin: 15 }}
 			/>
-			<ScrollView style={{ width:"95%", padding: 2 }}>
+			<KeyboardAwareScrollView style={{ width:"95%", padding: 2 }}>
 			{discoverSongs.map(song => 
 				<Card key={song.id} style={{
 					width: "100%",
@@ -169,7 +170,7 @@ export default function DiscoverScreen( {navigation} )
 					</Card.Actions>
 				</Card>
 			)}
-			</ScrollView>
+			</KeyboardAwareScrollView>
 	    </View>
     )
 }
