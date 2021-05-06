@@ -56,6 +56,11 @@ export default function LibraryScreen({ navigation })
                                 <Card.Content>
                                     <Title>{song.songTitle}</Title>
                                     <Paragraph>{song.artistName}</Paragraph>
+                                    <IconButton
+                                        icon="play"
+                                        color="#4F5FA0"
+                                        onPress={() => handlePlay(song.id)}>
+                                        </IconButton>
                                     <Button 
                                     mode="contained"
                                     style={{margin: 10}}
