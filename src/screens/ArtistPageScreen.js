@@ -125,7 +125,10 @@ export default function ArtistPageScreen({ navigation, route })
         alert("to album page");
     }
     const goToPlaylist = (contentID, contentName) => {
-        alert("to album page");
+        navigation.navigate('playlistScreen', {
+            playlistID: contentID,
+            contentName: contentName
+        });
     }
 
 	return (
