@@ -1,6 +1,6 @@
 import  React, { useState, useContext, useEffect } from 'react';
 import { Text, View, ScrollView, TextInput, FlatList } from 'react-native';
-import { Button, Card, Title, Paragraph } from 'react-native-paper';
+import { Button, Card, IconButton, Title, Paragraph } from 'react-native-paper';
 import { AuthContext } from '../navigation/AuthProvider';
 import { firebase } from '../firebase/config';
 import Loading  from '../components/Loading';
@@ -37,9 +37,13 @@ export default function LibraryScreen({ navigation })
     const unSaveSong = async (songID, songTitle) => {
         try {
             userRef.collection('savedSongs').doc(songID).delete();
+            alert("Song unsaved!");
         } catch (e) {
             console.log(e);
         }
+    }
+    const handlePlay = (songID) => {
+        alert("play");
     }
 
     return (

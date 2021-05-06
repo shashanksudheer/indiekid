@@ -124,4 +124,14 @@ export default StyleSheet.create({
         marginLeft: 35,
         marginRight: 35,
     },
+    albumCover: {
+        width: 250,
+        height: 250
+    },
+    controls: {
+        flexDirection: 'row'
+    },
+    control: {
+        margin: 20
+    }
 });
