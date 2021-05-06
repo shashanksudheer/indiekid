@@ -7,7 +7,9 @@ import styles from './styles';
 // user.displayName takes a while to update when you first register
 export default function HomeScreen({ navigation })
 {
-	const { user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
+
+    console.log(user.displayName);
     return (
         <View style={styles.container}>
             <Text style={styles.text}> Welcome Home, {user.displayName} </Text>
