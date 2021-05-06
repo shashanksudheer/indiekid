@@ -13,6 +13,7 @@ import Loading  from '../components/Loading';
 import RadioButton from '../components/RadioButton';
 import styles from './styles';
 import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 const modalStyles = StyleSheet.create({
   centeredView: {
@@ -92,6 +93,8 @@ const RadioOptions = [
         text: 'free',
     },
 ];
+
+const storage = firebase.storage();
 
 export default function UploadSongsScreen({ navigation, route })
 {
@@ -380,7 +383,7 @@ export default function UploadSongsScreen({ navigation, route })
 					style = {styles.button}
 					onPress={onSongFileChange}>
 					<Text style={styles.buttonTitle}>
-					    Select Song File
+					    [iCloud] Select Song File
 					</Text>
 				    </TouchableOpacity>
 				    {songImage != null &&
@@ -397,9 +400,33 @@ export default function UploadSongsScreen({ navigation, route })
 					style = {styles.button}
 					onPress = {onSongImageFileChange}>
 					<Text style = {styles.buttonTitle}>
-					    Upload Song Image File
+					    [Local] Upload Song Image File
 					</Text>
 				    </TouchableOpacity>
+				    <TouchableOpacity
+                                        style = {styles.button}
+                                        onPress={onSongFileChange}>
+                                        <Text style={styles.buttonTitle}>
+                                            [Local] Select Song File
+                                        </Text>
+                                    </TouchableOpacity>
+                                    {songImage != null &&
+                                        <>
+                                            <Image
+                                                style = {styles.logo}
+                                                source = {{
+                                                    uri: songImage.uri,
+                                                }}
+                                            />
+                                        </>
+                                    }
+                                    <TouchableOpacity
+                                        style = {styles.button}
+                                        onPress = {onSongImageFileChange}>
+                                        <Text style = {styles.buttonTitle}>
+                                            [iCloud] Upload Song Image File
+                                        </Text>
+                                    </TouchableOpacity>
                                     <RadioButton
                                         selectedOption={access}
                                         onSelect={onSelect}
