@@ -1,12 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, Input, TextInput, TouchableOpacity } from 'react-native';
 import { firebase } from '../firebase/config';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { DocumentPicker } from 'react-native-document-picker';
 import { AuthContext } from '../navigation/AuthProvider';
 import Loading from '../components/Loading';
 import styles from './styles';
 
 const userRef = firebase.firestore().collection('users');
+const storage = firebase.storage();
 
 export default function EditProfileScreen( { navigation, route })
 {
@@ -18,10 +20,11 @@ export default function EditProfileScreen( { navigation, route })
     const [email, setEmail] = useState('');
     const [userName, setUserName] = useState('');
     const [bio, setBio] = useState('');
+    const [banner, setBanner] = useState(null);
 
     const [isArtist, setIsArtist] = useState(false);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
 	if (isArtist)
 	{
 	    const data = {
@@ -44,26 +47,46 @@ export default function EditProfileScreen( { navigation, route })
 	    const res = userRef.doc(user.uid).set(data);
 	}
 
+	if (banner != null)
+	{
+	    const storageRef = storage.ref();
+	    const fileRef = storageRef.child(banner.name);
+
+	    await fileRef.put(file);
+
+	    userRef.doc(user.uid).update({
+		images: firebase.firestore.FieldValue.arrayUnion({
+		    name: file.name,
+		    url: await fileRef.getDownloadURL()
+		})
+	    })
+	}
+
 	navigation.navigate("Settings");
+
+	return user.updateProfile({
+	    displayName: userName
+	});
     }
 
-    // Was trying to force loop to occur until data is inputted
-    const handleNullData = () => {
-	console.log(userData);
-	if (userData != null)
-	{
-	    setUserName(userData.username_d);
-	    setEmail(userData.email_d);
+    const onFileChange = async () => {
+	try {
+	    const res = await DocumentPicker.pick({
+		type: [DocumentPicker.types.images],
+	    });
+	    console.log('res: ' + JSON.stringify(res));
+	    setBanner(res);
+	} catch (err) {
+	    setBanner(null);
 
-	    if (userData.userType_d == "artist")
-	    {
-		setIsArtist(true);
-		setBio(userData.artistBio);
+	    if (DocumentPicker.isCancel(err)) {
+		alert('Canceled');
 	    }
-	}
-	else
-	{
-	    handleNullData();
+	    else
+	    {
+		alert('Unknown Error: ' + JSON.stringify(err));
+		throw err;
+	    }
 	}
     }
 
@@ -74,27 +97,25 @@ export default function EditProfileScreen( { navigation, route })
 		    } else {
 			const userDoc = doc.data();
 			setUserData(userDoc);
+			setBanner(doc.data().banner);
 		    }
-		    console.log(userData)
+		    console.log(userData) // Use doc.data() to check since userData takes a while to set
 
-		    if (userData != null) {
-		        if (userData.userType_d == "artist")
+		    if (doc.data() != null) {
+		        if (doc.data().userType_d == "artist")
 			{
 			    setIsArtist(true);
 
-			    setBio(userData.artistBio);
+			    setBio(doc.data().artistBio);
 			}
 
-			setUserName(userData.username_d);
-			setEmail(userData.email_d);
-		    }
-		    else
-		    {
-//			handleNullData();
-		    }
+			setUserName(doc.data().username_d);
+			setEmail(doc.data().email_d);
 
-		    if (loading) {
-		        setLoading(false);
+			if (loading)
+			{
+			    setLoading(false);
+			}
 		    }
 		});
     }, []);
@@ -124,16 +145,27 @@ export default function EditProfileScreen( { navigation, route })
 		    underlineColorAndroid = 'transparent'
 		    autoCapitalize = 'none'
 		/>
-		{isArtist && <><Text> Bio </Text>
-		<TextInput
-		    style = {styles.input}
-		    numberOfLine= {4}
-		    multiline
-		    value={bio}
-		    onChangeText = {(text) => setBio(text)}
-		    underlineColorAndroid = 'transparent'
-		    autoCapitalize = 'none'
-		/></>}
+		{isArtist &&
+		    <>
+			<Text> Bio </Text>
+			<TextInput
+			    style = {styles.input}
+			    numberOfLine= {4}
+			    multiline
+			    value={bio}
+			    onChangeText = {(text) => setBio(text)}
+			    underlineColorAndroid = 'transparent'
+			    autoCapitalize = 'none'
+			/>
+			<TouchableOpacity
+			    style={styles.button}
+			    onPress={onFileChange}>
+			    <Text style={styles.buttonTitle}>
+				Upload an image
+			    </Text>
+			</TouchableOpacity>
+		    </>
+		}
 		<TouchableOpacity
 		    style={styles.button}
 		    onPress={handleSubmit}>
