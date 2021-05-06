@@ -1,7 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react'; import { Text, View, Input, Image, TextInput, TouchableOpacity 
-} from 'react-native'; import { firebase } from '../firebase/config'; import { KeyboardAwareScrollView } from 
-'react-native-keyboard-aware-scroll-view'; import * as DocumentPicker from 'expo-document-picker'; import { AuthContext } from 
-'../navigation/AuthProvider'; import Loading from '../components/Loading'; import styles from './styles';
+import React, { useState, useContext, useEffect } from 'react';
+import { Text, View, Input, Image, TextInput, TouchableOpacity } from 'react-native';
+import { firebase } from '../firebase/config';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as DocumentPicker from 'expo-document-picker';
+import { AuthContext } from '../navigation/AuthProvider';
+import Loading from '../components/Loading';
+import styles from './styles';
 
 const userRef = firebase.firestore().collection('users');
 const storage = firebase.storage();
@@ -19,7 +23,6 @@ export default function EditProfileScreen( { navigation, route })
     const [banner, setBanner] = useState(null);
 
     const [isArtist, setIsArtist] = useState(false);
-    const [uploadedBanner, setUploadedBanner] = useState(false);
 
     const handleSubmit = async () => {
 	if (isArtist)
@@ -74,7 +77,6 @@ export default function EditProfileScreen( { navigation, route })
 	if (res.type == "success")
 	{
 	    setBanner(res);
-	    setUploadedBanner(true);
 	}
 	else
 	{

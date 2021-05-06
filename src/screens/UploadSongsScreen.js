@@ -1,6 +1,6 @@
 import  React, { useState, useContext, useEffect } from 'react';
-import { 
-    Text, View, TouchableOpacity, 
+import {
+    Text, View, TouchableOpacity, Image,
     TextInput, FlatList, ScrollView,
     Pressable, Modal, StyleSheet,
 } from 'react-native';
@@ -12,6 +12,7 @@ import { firebase } from '../firebase/config';
 import Loading  from '../components/Loading';
 import RadioButton from '../components/RadioButton';
 import styles from './styles';
+import * as DocumentPicker from 'expo-document-picker';
 
 const modalStyles = StyleSheet.create({
   centeredView: {
@@ -110,6 +111,9 @@ export default function UploadSongsScreen({ navigation, route })
     const [genre, setGenre] = useState([]);
     const [songURL, setSongURL] = useState('');
     const [songIDs, setSongIDs] = useState([]);
+    const [songImage, setSongImage] = useState(null);
+    const [songFile, setSongFile] = useState(null);
+
 
     const { user } = useContext(AuthContext);
     const { contentID } = route.params;
@@ -190,11 +194,26 @@ export default function UploadSongsScreen({ navigation, route })
         setSelected([]);
     };
     const uploadFile = async () => {
+
+	const storageRef = storage.ref("songs/" + user.displayName + "/" + songTitle + "/");
+	const songFileRef = storageRef.child(songFile.name);
+	const songImageFileRef = storageRef.child(songImage.name);
+
+	await songImageFileRef.put(songImage);
+	await songFileRef.put(songFile);
+
         setModalVisible(!modalVisible);
+
         const songObject = {
             access: access,
             songTitle: songTitle,
-            songURL: songURL,
+	    uploadDate: Date().toLocaleString(),
+	    songFileName: songFile.name,
+            songURL: await songFileRef.getDownloadURL(),
+	    songFileSize: songFile.size,
+	    songImgName: songImage.name,
+	    songImgURL: await songImageFileRef.getDownloadURL(),
+	    songImgSize: await songImage.size,
             artistID: [user.uid],
             artistName: [user.displayName],
             publicMeta: {
@@ -278,11 +297,39 @@ export default function UploadSongsScreen({ navigation, route })
         navigation.navigate('Library');
     };
 
+    const onSongFileChange = async () => {
+	let res = await DocumentPicker.getDocumentAsync("audio/*");
+
+	if (res.type == "success")
+	{
+	    setSongFile(res);
+	}
+	else
+	{
+	    console.log("Upload of song file failed");
+	}
+	console.log(res);
+    }
+
+    const onSongImageFileChange = async () => {
+	let res = await DocumentPicker.getDocumentAsync("image/*");
+
+	if (res.type == "success")
+	{
+	    setSongImage(res);
+	}
+	else
+	{
+	    console.log("Upload of song image file failed");
+	}
+	console.log(res);
+    }
+
     return (
             <View style={styles.container}>
                 {loading ? <Loading/> : (
-                	<KeyboardAwareScrollView 
-                            key="scrollList" 
+                	<KeyboardAwareScrollView
+                            key="scrollList"
                             style={{ width:"95%", padding: 2 }}
                             showsVerticalScrollIndicator={false}>
                         <Modal
@@ -329,15 +376,30 @@ export default function UploadSongsScreen({ navigation, route })
                                         underlineColorAndroid="transparent"
                                         autoCapitalize="none"
                                     />
-                                    <TextInput
-                                        style={modalStyles.longInput}
-                                        placeholder='Select File'
-                                        placeholderTextColor="#aaaaaa"
-                                        onChangeText={(text) => setSongURL(text)}
-                                        value={songURL}
-                                        underlineColorAndroid="transparent"
-                                        autoCapitalize="none"
-                                    />
+				    <TouchableOpacity
+					style = {styles.button}
+					onPress={onSongFileChange}>
+					<Text style={styles.buttonTitle}>
+					    Select Song File
+					</Text>
+				    </TouchableOpacity>
+				    {songImage != null &&
+					<>
+					    <Image
+						style = {styles.logo}
+						source = {{
+						    uri: songImage.uri,
+						}}
+					    />
+					</>
+				    }
+				    <TouchableOpacity
+					style = {styles.button}
+					onPress = {onSongImageFileChange}>
+					<Text style = {styles.buttonTitle}>
+					    Upload Song Image File
+					</Text>
+				    </TouchableOpacity>
                                     <RadioButton
                                         selectedOption={access}
                                         onSelect={onSelect}
