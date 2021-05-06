@@ -20,7 +20,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "usesIcloudStorage": true
     },
     "android": {
       "adaptiveIcon": {
@@ -30,6 +31,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
   }
 }

@@ -16,6 +16,7 @@
     "base-64": "^1.0.0",
     "expo": "~40.0.0",
     "expo-cli": "^4.3.4",
+    "expo-document-picker": "~8.4.1",
     "expo-status-bar": "~1.0.3",
     "firebase": "^8.4.1",
     "react": "16.13.1",

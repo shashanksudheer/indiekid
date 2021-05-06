@@ -1,11 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, Input, TextInput, TouchableOpacity } from 'react-native';
-import { firebase } from '../firebase/config';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { DocumentPicker } from 'react-native-document-picker';
-import { AuthContext } from '../navigation/AuthProvider';
-import Loading from '../components/Loading';
-import styles from './styles';
+import React, { useState, useContext, useEffect } from 'react'; import { Text, View, Input, Image, TextInput, TouchableOpacity 
+} from 'react-native'; import { firebase } from '../firebase/config'; import { KeyboardAwareScrollView } from 
+'react-native-keyboard-aware-scroll-view'; import * as DocumentPicker from 'expo-document-picker'; import { AuthContext } from 
+'../navigation/AuthProvider'; import Loading from '../components/Loading'; import styles from './styles';
 
 const userRef = firebase.firestore().collection('users');
 const storage = firebase.storage();
@@ -23,6 +19,7 @@ export default function EditProfileScreen( { navigation, route })
     const [banner, setBanner] = useState(null);
 
     const [isArtist, setIsArtist] = useState(false);
+    const [uploadedBanner, setUploadedBanner] = useState(false);
 
     const handleSubmit = async () => {
 	if (isArtist)
@@ -49,14 +46,16 @@ export default function EditProfileScreen( { navigation, route })
 
 	if (banner != null)
 	{
-	    const storageRef = storage.ref();
+	    const storageRef = storage.ref("banners/" + userName + "-" + user.uid + "/"); // Create folder to upload file
 	    const fileRef = storageRef.child(banner.name);
 
-	    await fileRef.put(file);
+	    await fileRef.put(banner);
 
 	    userRef.doc(user.uid).update({
-		images: firebase.firestore.FieldValue.arrayUnion({
-		    name: file.name,
+		banner: firebase.firestore.FieldValue.arrayUnion({
+		    name: banner.name,
+		    uploadDate: Date().toLocaleString(),
+		    size: banner.size,
 		    url: await fileRef.getDownloadURL()
 		})
 	    })
@@ -70,24 +69,18 @@ export default function EditProfileScreen( { navigation, route })
     }
 
     const onFileChange = async () => {
-	try {
-	    const res = await DocumentPicker.pick({
-		type: [DocumentPicker.types.images],
-	    });
-	    console.log('res: ' + JSON.stringify(res));
-	    setBanner(res);
-	} catch (err) {
-	    setBanner(null);
+	let res = await DocumentPicker.getDocumentAsync("image/*");
 
-	    if (DocumentPicker.isCancel(err)) {
-		alert('Canceled');
-	    }
-	    else
-	    {
-		alert('Unknown Error: ' + JSON.stringify(err));
-		throw err;
-	    }
+	if (res.type == "success")
+	{
+	    setBanner(res);
+	    setUploadedBanner(true);
 	}
+	else
+	{
+	    console.log("Cancelled");
+	}
+	console.log(res);
     }
 
     useEffect(() => {
@@ -157,6 +150,16 @@ export default function EditProfileScreen( { navigation, route })
 			    underlineColorAndroid = 'transparent'
 			    autoCapitalize = 'none'
 			/>
+			{banner != null &&
+			    <>
+				<Image
+				    style = {styles.logo}
+				    source = {{
+					uri: banner.uri,
+				    }}
+				/>
+			    </>
+			}
 			<TouchableOpacity
 			    style={styles.button}
 			    onPress={onFileChange}>
