@@ -80,7 +80,7 @@ export default function EditProfileScreen( { navigation, route })
 	}
 	else
 	{
-	    console.log("Cancelled");
+	    console.log("Upload of banner failed");
 	}
 	console.log(res);
     }
