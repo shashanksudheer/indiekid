@@ -127,6 +127,15 @@ export default function UploadSongsScreen({ navigation, route })
     const songsRef = firebase.firestore().collection('songs');
 
     useEffect(() => {
+	(async () => {
+	    if (Platform.OS !== 'web') {
+		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+		if (status !== 'granted') {
+		    alert('Need camera roll permissions');
+		}
+	    }
+	})();
         return songsRef.where("artistID", "array-contains", user.uid)
         .onSnapshot(querySnapshot => {
             const songs = [];
@@ -314,6 +323,22 @@ export default function UploadSongsScreen({ navigation, route })
 	console.log(res);
     }
 
+    const onLocalSongFileChange = async () => {
+	let res = await ImagePicker.launchImageLibraryAsync({
+	    mediaTypes: ImagePicker.MediaTypeOptions.All,
+	    allowsEditing: true,
+	    aspect: [4, 3],
+	    quality: 1,
+	});
+
+	console.log(res);
+
+	if (!res.cancelled)
+	{
+	    setSongFile(res);
+	}
+    }
+
     const onSongImageFileChange = async () => {
 	let res = await DocumentPicker.getDocumentAsync("image/*");
 
@@ -326,6 +351,22 @@ export default function UploadSongsScreen({ navigation, route })
 	    console.log("Upload of song image file failed");
 	}
 	console.log(res);
+    }
+
+    const onLocalSongImageFileChange = async () => {
+	let res = await ImagePicker.launchImageLibraryAsync({
+	    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+	    allowsEditing: true,
+	    aspect: [4, 3],
+	    quality: 1,
+	});
+
+	console.log(res);
+
+	if (!res.cancelled)
+	{
+	    setSongImage(res);
+	}
     }
 
     return (
@@ -397,15 +438,15 @@ export default function UploadSongsScreen({ navigation, route })
 					</>
 				    }
 				    <TouchableOpacity
-					style = {styles.button}
-					onPress = {onSongImageFileChange}>
-					<Text style = {styles.buttonTitle}>
-					    [Local] Upload Song Image File
-					</Text>
-				    </TouchableOpacity>
+                                        style = {styles.button}
+                                        onPress = {onSongImageFileChange}>
+                                        <Text style = {styles.buttonTitle}>
+                                            [iCloud] Upload Song Image File
+                                        </Text>
+                                    </TouchableOpacity>
 				    <TouchableOpacity
                                         style = {styles.button}
-                                        onPress={onSongFileChange}>
+                                        onPress={onLocalSongFileChange}>
                                         <Text style={styles.buttonTitle}>
                                             [Local] Select Song File
                                         </Text>
@@ -420,11 +461,11 @@ export default function UploadSongsScreen({ navigation, route })
                                             />
                                         </>
                                     }
-                                    <TouchableOpacity
+				    <TouchableOpacity
                                         style = {styles.button}
-                                        onPress = {onSongImageFileChange}>
+                                        onPress = {onLocalSongImageFileChange}>
                                         <Text style = {styles.buttonTitle}>
-                                            [iCloud] Upload Song Image File
+                                            [Local] Upload Song Image File
                                         </Text>
                                     </TouchableOpacity>
                                     <RadioButton
