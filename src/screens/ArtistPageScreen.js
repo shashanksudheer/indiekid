@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Text, View, ScrollView } from 'react-native';
-import { Button, IconButton, Card, Title, Paragraph, List, Divider } from 'react-native-paper';
+import { Text, View, ScrollView, TouchableOpacity, Modal, } from 'react-native';
+import { Button, IconButton, Card, Title, Paragraph, List, Divider, TextInput } from 'react-native-paper';
 import { firebase } from '../firebase/config';
 import { AuthContext } from '../navigation/AuthProvider';
 import Loading  from '../components/Loading';
@@ -16,6 +16,7 @@ export default function ArtistPageScreen({ navigation, route })
     const [mostPopular, setMostPopular] = useState([]);
     const [releases, setReleases] = useState([]);
     const [artistPlaylists, setArtistPlaylists] = useState([]);
+    const [openPaymentPortal, setOpenPaymentPortal ] = useState(false);
 
 	const { artistID, artistName } = route.params;
     const { user } = useContext(AuthContext);
@@ -135,6 +136,41 @@ export default function ArtistPageScreen({ navigation, route })
             <View style={{ flex: 0, padding: 35, paddingBottom: 200 }}>
             {loading1 || loading2 || loading3 || loading4 ? <Loading/> : (
                 <View>
+
+                    <Modal visible={openPaymentPortal} animationType='slide'>
+                        <Card style={{display: "flex", flex: 0, paddingTop: 100, }}
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                        keyboardVerticalOffset={20}>
+                            <Text style={{ fontSize: 20, marginLeft: 40, marginRight: 40, marginBottom: 40}}>Enter Payment Information</Text>
+                            <TextInput
+                                style={{height: 40, marginLeft: 40, marginRight: 40 }}
+                                placeholder="Name on Card"
+                            />
+                            <TextInput
+                                style={{height: 40, marginLeft: 40, marginRight: 40 }}
+                                placeholder="Card Number"
+                            />
+                            <TextInput
+                                style={{height: 40, marginLeft: 40, marginRight: 40 }}
+                                placeholder="Expiry Date"
+                            />
+                            <TextInput
+                                style={{height: 40, marginLeft: 40, marginRight: 40, marginBottom: 10 }}
+                                placeholder="CVC"
+                            />
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => setOpenPaymentPortal(false)}>
+                                <Text style={styles.buttonTitle}>Submit Payment</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => setOpenPaymentPortal(false)}>
+                                <Text style={styles.buttonTitle}>Cancel</Text>
+                            </TouchableOpacity>
+                        </Card>
+                    </Modal>
+
                     <Text style={styles.title}>{artistName}</Text>
                     <ScrollView
                     style={styles.ScrollView}
@@ -222,6 +258,13 @@ export default function ArtistPageScreen({ navigation, route })
                                     }}
                                     title={artistData.artistBio}
                                 />
+                        </List.Section>
+                        <List.Section>
+                        <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => setOpenPaymentPortal(true)}>
+                            <Text style={styles.buttonTitle}>Subscribe to Artist</Text>
+                        </TouchableOpacity>
                         </List.Section>
                     </ScrollView>
                 </View>
