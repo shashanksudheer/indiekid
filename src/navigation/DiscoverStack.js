@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button } from 'react-native';
-import { DiscoverScreen, ArtistPageScreen, DiscographyScreen } from '../screens';
+import { DiscoverScreen, ArtistPageScreen, DiscographyScreen,
+  AudioPlayerScreen
+} from '../screens';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +38,13 @@ export default function DiscoverStack() {
           options={({ route }) => ({
             title: route.params.contentName,
           })}
+        />
+        <Stack.Screen
+          name="AudioPlayer"
+          component={AudioPlayerScreen}
+          options={{
+              title: null,
+          }}
         />
     </Stack.Navigator>
   );

@@ -10,6 +10,7 @@ import {
   CreatePlaylistScreen, CreateAlbumScreen, CreateSingleScreen,
   BlankScreen, PlaylistScreen, LibraryPlaylistScreen,
   AddSongsPlaylistScreen, UploadSongsScreen, LibraryMyContentScreen,
+  AudioPlayerScreen,
 } from '../screens';
 
 const Stack = createStackNavigator();
@@ -22,7 +23,7 @@ function MyLibraryTab() {
     <LibraryTab.Navigator>
       <LibraryTab.Screen name="Saved Songs" component={LibraryScreen} />
       <LibraryTab.Screen name="Artists" component={BlankScreen} />
-      <LibraryTab.Screen name="Playlists" component={LibraryPlaylistScreen} />
+      <LibraryTab.Screen name="Play Lists" component={LibraryPlaylistScreen} />
     </LibraryTab.Navigator>
   );
 }
@@ -33,7 +34,7 @@ function ArtistLibraryTab() {
       <LibraryTab.Screen name="My Content" component={LibraryMyContentScreen} />
       <LibraryTab.Screen name="Saved Songs" component={LibraryScreen} />
       <LibraryTab.Screen name="Artists" component={BlankScreen} />
-      <LibraryTab.Screen name="Playlists" component={LibraryPlaylistScreen} />
+      <LibraryTab.Screen name="Play Lists" component={LibraryPlaylistScreen} />
     </LibraryTab.Navigator>
   );
 }
@@ -162,6 +163,13 @@ export default function LibraryStack() {
             title: route.params.contentName,
             headerLeft: null,
           })}
+        />
+        <Stack.Screen
+            name="AudioPlayer"
+            component={AudioPlayerScreen}
+            options={() => ({
+              title: null,
+            })}
         />
     </Stack.Navigator>
   );

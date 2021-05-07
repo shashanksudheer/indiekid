@@ -43,9 +43,10 @@ export default function LibraryScreen({ navigation })
         }
     }
     const handlePlay = (songID) => {
-        alert("play");
+        navigation.navigate('AudioPlayer', {
+            songID: songID,
+        });
     }
-
     return (
             <View style={styles.container}>
                 {loading ? <Loading/> : (
@@ -71,16 +72,6 @@ export default function LibraryScreen({ navigation })
                                     onPress={() => unSaveSong(song.id, song.songTitle)}>Unsave</Button>
                                 </Card.Content>
                                 <Card.Actions>
-                                    <Button 
-                                    mode="default"
-                                    onPress={() => {
-                                            navigation.navigate('Discography', {
-                                                songID: song.id,
-                                                songTitle: song.songTitle,
-                                                artistID: song.artistID,
-                                                artistName: song.artistName,
-                                            });
-                                    }}>Go to Song</Button>
                                     <Button 
                                     mode="default"
                                     onPress={() => {

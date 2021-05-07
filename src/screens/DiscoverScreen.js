@@ -92,6 +92,11 @@ export default function DiscoverScreen( {navigation} )
     		console.log(e);
     	}
     }
+    const handlePlay = (songID) => {
+        navigation.navigate('AudioPlayer', {
+            songID: songID,
+        });
+    }
 
 	// function that returns JSX creating a list of artist info returned from search
 	const ArtistTiles = () => {
@@ -136,14 +141,8 @@ export default function DiscoverScreen( {navigation} )
 					<Card.Actions>
 						<Button 
 						mode="default"
-						onPress={() => {
-                                navigation.navigate('Discography', {
-                                	songID: song.id,
-                                	songTitle: song.songTitle,
-                                	artistID: song.artistID,
-                                    artistName: song.artistName,
-                                });
-                        }}>Go to Song</Button>
+						onPress={() => handlePlay(song.id)
+                        }>Go to Song</Button>
                         <Button 
 						mode="default"
 						onPress={() => saveSong(song.id, song.artistID, song.songTitle, song.artistName)}>Save</Button>

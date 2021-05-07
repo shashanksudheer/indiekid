@@ -6,7 +6,6 @@ import LibraryStack from './LibraryStack';
 import DiscoverStack from './DiscoverStack';
 import StreamStack from './StreamStack';
 import SettingsStack from './SettingsStack';
-import { DiscoverScreen, StreamScreen, SettingsScreen } from '../screens';
 
 const Tab = createBottomTabNavigator();
 

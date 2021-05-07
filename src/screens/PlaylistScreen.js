@@ -80,9 +80,10 @@ export default function PlaylistScreen({ navigation, route })
     }, [!loadingSongIDs]);
 
     const handlePlay = (songID) => {
-        alert("play");
+        navigation.navigate('AudioPlayer', {
+            songID: songID,
+        });
     }
-
     const removeFromPlaylist = async (songID, songTitle) => {
         try {
             playlistRef.update({
@@ -134,14 +135,6 @@ export default function PlaylistScreen({ navigation, route })
                                         </IconButton>
                                 </Card.Content>
                                 <Card.Actions>
-                                    <Button 
-                                    mode="default"
-                                    onPress={() => {
-                                            navigation.navigate('Discography', {
-                                                contentID: song.id,
-                                                contentName: song.songTitle,
-                                            });
-                                    }}>Go to Song</Button>
                                     <Button
                                     disabled={!isOwner}
                                     mode="default"
