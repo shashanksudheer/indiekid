@@ -15,8 +15,10 @@ export default function DiscoverScreen( {navigation} )
 	const [artistLoading, setArtistLoading] = useState(true);
 	const [songLoading, setSongLoading] = useState(true);
 
+    const [allArtists, setAllArtists] = useState([]);
     const [discoverArtists, setDiscoverArtists] = useState([]);
     const [discoverSongs, setDiscoverSongs] = useState([]);
+    const [discoverGenre, setDiscoverGenre] = useState([]);
 
 	const [searchQuery, setSearchQuery] = useState('');
 	const [searchTimer, setSearchTimer] = useState(null);
@@ -79,6 +81,55 @@ export default function DiscoverScreen( {navigation} )
 			return setDiscoverSongs([]);
 		}
 	}
+    const fetchAllArtists = (input) => {
+        console.log(input);
+        if (input === 'all artists') {
+            return artistRef.onSnapshot(querySnapshot => {
+                const artists = [];
+                querySnapshot.forEach(artist => {
+                    const { username_d, artistBio } = artist.data();
+                    artists.push({
+                        id: artist.id,
+                        username_d,
+                        artistBio,
+                    });
+                });
+                setAllArtists(artists);
+                if(artistLoading) {
+                    setArtistLoading(false);
+                }
+            });
+        } else {
+            return setAllArtists([]);
+        }
+    }
+    const fetchSongGenreSearch = (input) => {
+        console.log(input);
+        if (input !== '') {
+            return songRef.where("publicMeta.genre", "array-contains", input)
+              .onSnapshot(querySnapshot => {
+                const songs = [];
+                querySnapshot.forEach(song => {
+                    console.log('genre: ', input)
+                    const { access, songTitle, artistID, artistName } = song.data();
+                    if(access === 'public') {
+                        songs.push({
+                            id: song.id,
+                            songTitle,
+                            artistID,
+                            artistName,
+                        });
+                    }
+                });
+                setDiscoverGenre(songs);
+                if(songLoading) {
+                    setSongLoading(false);
+                }
+            });
+        } else {
+            return setDiscoverGenre([]);
+        }
+    }
     const saveSong = async (songID, artistID, songTitle, artistName) => {
     	const data = {
     		artistID: artistID[0],
@@ -120,6 +171,8 @@ export default function DiscoverScreen( {navigation} )
 					setSearchTimer(setTimeout(() => {
 						fetchArtistSearch(text);
 						fetchSongSearch(text);
+                        fetchSongGenreSearch(text);
+                        fetchAllArtists(text);
 					}, 500),
 					);
 				}}
@@ -171,6 +224,48 @@ export default function DiscoverScreen( {navigation} )
 					</Card.Actions>
 				</Card>
 			)}
+            {allArtists.map(artist => 
+                <Card key={artist.id} style={{
+                    width: "100%",
+                    margin: 5,
+                }}>
+                    <Card.Content>
+                        <Title>{artist.username_d}</Title>
+                        <Paragraph>{artist.artistBio}</Paragraph>
+                    </Card.Content>
+                    <Card.Actions>
+                        <Button 
+                        mode="default"
+                        onPress={() => {
+                                // console.log(artist.id);
+                                navigation.navigate('ArtistPage', {
+                                    artistID: artist.id,
+                                    artistName: artist.username_d,
+                                });
+                        }}>Go to Artist</Button>
+                    </Card.Actions>
+                </Card>
+            )}
+            {discoverGenre.map(song => 
+                <Card key={song.id} style={{
+                    width: "100%",
+                    margin: 5,
+                }}>
+                    <Card.Content>
+                        <Title>{song.songTitle}</Title>
+                        <Paragraph>by {song.artistName}</Paragraph>
+                    </Card.Content>
+                    <Card.Actions>
+                        <Button 
+                        mode="default"
+                        onPress={() => handlePlay(song.id)
+                        }>Go to Song</Button>
+                        <Button 
+                        mode="default"
+                        onPress={() => saveSong(song.id, song.artistID, song.songTitle, song.artistName)}>Save</Button>
+                    </Card.Actions>
+                </Card>
+            )}
 			</KeyboardAwareScrollView>
 	    </View>
     )
